@@ -2,7 +2,7 @@ import TokenType from "./TokenType";
 
 class Lox {
   PrintTokenTypes() {
-    const tokenTypes = [TokenType.MINUS, TokenType.PLUS];
+    const tokenTypes = [...Object.keys(TokenType)];
     tokenTypes.forEach((type) => {
       console.log(type);
     });
