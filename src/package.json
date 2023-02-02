@@ -5,7 +5,7 @@
   "main": "Lox.ts",
   "scripts": {
     "start": "ts-node Lox.ts",
-    "lint": "eslint --ext .ts ./",
+    "lint": "eslint '**/*.ts'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

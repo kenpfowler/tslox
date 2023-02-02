@@ -1,7 +1,9 @@
 # Lox interpreter & Strata UI Project Sandbox
 
 Setting up a repo to build an interpreter with typescript
-also practice some devops for work
+also practice some devops
+
+**GOAL**: Understand the concepts necessary to build an interpreter & learn how to setup a workflow
 
 ## Task
 
@@ -9,7 +11,7 @@ Setup the Strata UI Platform with eslint, prettier, and jest in the repo. Create
 
 [Ticket here!](https://strataresearch.atlassian.net/jira/software/projects/SUP/boards/16?selectedIssue=SUP-31)
 
-## Technologies were working with
+## Technologies we're working with
 
 - [typescript](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html): strongly typed javascript
 - [eslint](https://eslint.org/docs/latest/use/getting-started): static analysis tool for finding and fixing problems with your code
