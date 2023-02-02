@@ -4,7 +4,7 @@
   "description": "an interpreter written in typescript",
   "main": "Lox.ts",
   "scripts": {
-    "run": "ts-node Lox.ts",
+    "start": "ts-node Lox.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
