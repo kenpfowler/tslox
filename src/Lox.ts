@@ -1,5 +1,8 @@
 import TokenType from "./TokenType";
 
+const a = 1;
+a = 2;
+
 class Lox {
   PrintTokenTypes() {
     const tokenTypes = [...Object.keys(TokenType)];
