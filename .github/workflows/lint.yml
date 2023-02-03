@@ -40,5 +40,21 @@ jobs:
           # Make sure the actual branch is checked out when running on pull requests
           ref: ${{ github.head_ref }}
 
+      - name: Install Just
+        uses: extractions/setup-just@v1
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2.0.1
+        with:
+          version: 7
+
+      - name: Install dependencies
+        run: just pnpm install
+
       - name: Check code styles
         run: just prettier
