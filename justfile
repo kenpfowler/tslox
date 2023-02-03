@@ -8,4 +8,4 @@
 
 # Run prettier
 @prettier:
-        pnpm -C src run prettier
+    pnpm -C src run prettier:check
