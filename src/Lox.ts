@@ -14,5 +14,3 @@ class Lox {
 
 const tlox = new Lox();
 tlox.PrintTokenTypes();
-
-function main() {}

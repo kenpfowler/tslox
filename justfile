@@ -7,5 +7,13 @@
     pnpm -C src run lint
 
 # Run prettier
-@prettier:
+@prettier-format:
+    pnpm -C src run prettier:format
+
+# Check code styles
+@prettier-check:
     pnpm -C src run prettier:check
+
+# Test code
+@test:
+pnpm -C src run test
