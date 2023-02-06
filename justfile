@@ -16,4 +16,4 @@
 
 # Test code
 @test:
-pnpm -C src run test
+    pnpm -C src run test
