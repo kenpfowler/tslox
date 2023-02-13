@@ -11,7 +11,7 @@ class Scanner {
 
   // instantiate the scanner with the source code
   constructor(source: string) {
-    console.log(source);
+    console.log('__SOURCE FILE__', source);
     this.source = source;
   }
 
@@ -54,7 +54,6 @@ class Scanner {
 
   scanToken() {
     const char = this.advance();
-
     switch (char) {
       case TokenType.LEFT_PAREN:
         this.addToken({ type: TokenType.LEFT_PAREN, line: this.line });
@@ -131,12 +130,6 @@ class Scanner {
         //
         break;
     }
-
-    this.current++;
-  }
-
-  printSource() {
-    console.log(this.source);
   }
 }
 
