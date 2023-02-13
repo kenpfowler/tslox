@@ -1,4 +1,2 @@
-// this is a test file for the lox language
-// here are a bunch of tokens
-1 + 2 + 3 = * != ! >= <= == = /
-
+// Make sure the scanner can properly emit tokens for all these lexemes
+(){};,+-*!===<=>=!=<>/.
