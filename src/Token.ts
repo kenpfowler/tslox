@@ -1,16 +1,22 @@
-import TokenType from "./TokenType";
+import TokenType from './TokenType';
+export interface ITokenType {
+  lexeme?: string;
+  literal?: object;
+  type: TokenType;
+  line: number;
+}
 
 class Token {
-  readonly lexeme: string;
+  readonly lexeme: string | undefined;
+  readonly literal: object | undefined;
   readonly type: TokenType;
-  readonly literal: object;
   readonly line: number;
 
-  constructor(lexeme: string, type: TokenType, literal: object, line: number) {
-    this.lexeme = lexeme;
-    this.type = type;
-    this.literal = literal;
-    this.line = line;
+  constructor(args: ITokenType) {
+    this.lexeme = args.lexeme ? args.lexeme : undefined;
+    this.type = args.type;
+    this.literal = args.literal ? args.literal : undefined;
+    this.line = args.line;
   }
 
   public toString() {
