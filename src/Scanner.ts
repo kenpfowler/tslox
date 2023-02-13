@@ -3,7 +3,7 @@ import TokenType from './TokenType';
 
 class Scanner {
   // a scanner will take in a file and process it into tokens...
-  private tokens: Array<Token> = new Array();
+  private tokens: Array<Token> = [];
   private source: string;
   private start = 0;
   private current = 0;
@@ -50,6 +50,23 @@ class Scanner {
   private peek() {
     if (this.isAtEnd()) return '\0';
     return this.source.charAt(this.current);
+  }
+
+  private string() {
+    // needs to keep consuming tokens until it finds the closing "
+    // the current lexeme is the opening string when we get to this function so lets get the next character
+    // then we keep consuming characters until we find the closing string.
+    let char = this.advance();
+    while (!this.isAtEnd() && char !== '"') {
+      if (char === '\n') {
+        this.line++;
+      }
+
+      char = this.advance();
+    }
+
+    const string = this.source.substring(this.start + 1, this.current - 1);
+    this.addToken({ type: TokenType.STRING, lexeme: string, line: this.line });
   }
 
   scanToken() {
@@ -127,7 +144,7 @@ class Scanner {
         this.line++;
         break;
       case '"':
-        //
+        this.string();
         break;
     }
   }

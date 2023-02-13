@@ -1,3 +1,4 @@
 // Make sure the scanner can properly emit tokens for all these lexemes
 (){};,+-*!===<=>=!=<>/.
 "string"
+"another string"
