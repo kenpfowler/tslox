@@ -4,11 +4,10 @@ import Lox from './Lox';
 
 // we want to drop the user into a REPL for our interpreter if there is no file path provided.
 function main() {
-  const lox = new Lox();
   const filePath = process.argv[2];
 
   if (!filePath) {
-    lox.runPrompt();
+    Lox.runPrompt();
   }
 
   const fullPath = path.resolve(process.cwd(), filePath);
@@ -20,7 +19,7 @@ function main() {
     }
 
     console.log(`Running tslox interpreter on file -> ${fullPath}:`);
-    console.log(lox.run(data));
+    console.log(Lox.run(data));
     process.exit(0);
   });
 }
