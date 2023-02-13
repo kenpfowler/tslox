@@ -2,3 +2,6 @@
 (){};,+-*!===<=>=!=<>/.
 "string"
 "another string"
+123 
+123.25
+var myvar = "my string variables"

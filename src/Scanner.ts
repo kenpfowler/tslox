@@ -1,3 +1,4 @@
+import Lox from './Lox';
 import Token, { ITokenType } from './Token';
 import TokenType from './TokenType';
 
@@ -11,21 +12,20 @@ class Scanner {
 
   // instantiate the scanner with the source code
   constructor(source: string) {
-    console.log('__SOURCE FILE__', source);
     this.source = source;
   }
 
-  isAtEnd() {
+  private isAtEnd() {
     return this.current >= this.source.length;
   }
 
-  addToken(props: ITokenType) {
+  private addToken(props: ITokenType) {
     const token = new Token(props);
     this.tokens.push(token);
   }
 
   // search the source code for lexemes that can be represented as tokens
-  scanForTokens() {
+  public scanForTokens() {
     while (!this.isAtEnd()) {
       this.start = this.current;
       this.scanToken();
@@ -35,7 +35,7 @@ class Scanner {
     return this.tokens;
   }
 
-  advance() {
+  private advance() {
     return this.source.charAt(this.current++);
   }
 
@@ -53,24 +53,64 @@ class Scanner {
   }
 
   private string() {
-    // needs to keep consuming tokens until it finds the closing "
-    // the current lexeme is the opening string when we get to this function so lets get the next character
-    // then we keep consuming characters until we find the closing string.
-    let char = this.advance();
-    while (!this.isAtEnd() && char !== '"') {
-      if (char === '\n') {
+    while (!this.isAtEnd() && this.peek() !== '"') {
+      if (this.peek() === '\n') {
         this.line++;
       }
-
-      char = this.advance();
+      this.advance();
     }
 
+    if (this.isAtEnd()) {
+      Lox.reportError(this.line, 'Unterminated String');
+    }
+
+    this.advance();
+
     const string = this.source.substring(this.start + 1, this.current - 1);
-    this.addToken({ type: TokenType.STRING, lexeme: string, line: this.line });
+    this.addToken({
+      type: TokenType.STRING,
+      lexeme: string,
+      line: this.line,
+      literal: new String(string),
+    });
   }
 
-  scanToken() {
+  private isDigit(char: string) {
+    return char >= '0' && char <= '9';
+  }
+
+  private number() {
+    while (this.isDigit(this.peek())) {
+      this.advance();
+    }
+
+    // Look for a fractional part.
+    if (this.peek() == '.' && this.isDigit(this.peekNext())) {
+      // Consume the "."
+      this.advance();
+
+      while (this.isDigit(this.peek())) this.advance();
+    }
+
+    this.addToken({
+      type: TokenType.NUMBER,
+      literal: new Number(this.source.substring(this.start, this.current)),
+      line: this.line,
+    });
+  }
+
+  isAlpha(char: string) {
+    return (char >= 'a' && char <= 'z') || (char >= 'A' && char <= 'Z') || char == '_';
+  }
+
+  private peekNext() {
+    if (this.isAtEnd()) return '\0';
+    return this.source.charAt(this.current + 1);
+  }
+
+  private scanToken() {
     const char = this.advance();
+
     switch (char) {
       case TokenType.LEFT_PAREN:
         this.addToken({ type: TokenType.LEFT_PAREN, line: this.line });
@@ -146,6 +186,14 @@ class Scanner {
       case '"':
         this.string();
         break;
+      default:
+        if (this.isDigit(char)) {
+          this.number();
+        } else if (this.isAlpha(char)) {
+          console.log('found identifier');
+        } else {
+          Lox.reportError(this.line, 'Unexpected Character');
+        }
     }
   }
 }
