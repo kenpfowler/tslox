@@ -9,6 +9,23 @@ class Scanner {
   private start = 0;
   private current = 0;
   private line = 1;
+  private keywords: Map<string, TokenType> = new Map([
+    ['and', TokenType.AND],
+    ['class', TokenType.CLASS],
+    ['else', TokenType.ELSE],
+    ['false', TokenType.FALSE],
+    ['fun', TokenType.FUN],
+    ['for', TokenType.FOR],
+    ['if', TokenType.IF],
+    ['nil', TokenType.NIL],
+    ['or', TokenType.OR],
+    ['return', TokenType.RETURN],
+    ['super', TokenType.SUPER],
+    ['this', TokenType.THIS],
+    ['true', TokenType.TRUE],
+    ['var', TokenType.VAR],
+    ['while', TokenType.WHILE],
+  ]);
 
   // instantiate the scanner with the source code
   constructor(source: string) {
@@ -94,13 +111,36 @@ class Scanner {
 
     this.addToken({
       type: TokenType.NUMBER,
-      literal: new Number(this.source.substring(this.start, this.current)),
+      lexeme: this.getLexeme(),
+      literal: new Number(this.getLexeme()),
       line: this.line,
     });
   }
 
-  isAlpha(char: string) {
+  private identifier() {
+    // an identifier can be a keyword or a variable name...
+    // if we passed
+    while (this.isAlphaNumeric(this.peek())) {
+      this.advance();
+    }
+
+    const text = this.getLexeme();
+    let type = this.keywords.get(text);
+    if (!type) type = TokenType.IDENTIFIER;
+
+    this.addToken({
+      type,
+      line: this.line,
+      lexeme: this.getLexeme(),
+    });
+  }
+
+  private isAlpha(char: string) {
     return (char >= 'a' && char <= 'z') || (char >= 'A' && char <= 'Z') || char == '_';
+  }
+
+  private isAlphaNumeric(char: string) {
+    return this.isAlpha(char) || this.isDigit(char);
   }
 
   private peekNext() {
@@ -108,62 +148,74 @@ class Scanner {
     return this.source.charAt(this.current + 1);
   }
 
+  private getLexeme() {
+    return this.source.substring(this.start, this.current);
+  }
+
   private scanToken() {
     const char = this.advance();
 
     switch (char) {
       case TokenType.LEFT_PAREN:
-        this.addToken({ type: TokenType.LEFT_PAREN, line: this.line });
+        this.addToken({
+          type: TokenType.LEFT_PAREN,
+          line: this.line,
+          lexeme: this.getLexeme(),
+        });
         break;
       case TokenType.RIGHT_PAREN:
-        this.addToken({ type: TokenType.RIGHT_PAREN, line: this.line });
+        this.addToken({ type: TokenType.RIGHT_PAREN, line: this.line, lexeme: this.getLexeme() });
         break;
       case TokenType.LEFT_BRACE:
-        this.addToken({ type: TokenType.LEFT_BRACE, line: this.line });
+        this.addToken({ type: TokenType.LEFT_BRACE, line: this.line, lexeme: this.getLexeme() });
         break;
       case TokenType.RIGHT_BRACE:
-        this.addToken({ type: TokenType.RIGHT_BRACE, line: this.line });
+        this.addToken({ type: TokenType.RIGHT_BRACE, line: this.line, lexeme: this.getLexeme() });
         break;
       case TokenType.COMMA:
-        this.addToken({ type: TokenType.COMMA, line: this.line });
+        this.addToken({ type: TokenType.COMMA, line: this.line, lexeme: this.getLexeme() });
         break;
       case TokenType.DOT:
-        this.addToken({ type: TokenType.DOT, line: this.line });
+        this.addToken({ type: TokenType.DOT, line: this.line, lexeme: this.getLexeme() });
         break;
       case TokenType.MINUS:
-        this.addToken({ type: TokenType.MINUS, line: this.line });
+        this.addToken({ type: TokenType.MINUS, line: this.line, lexeme: this.getLexeme() });
         break;
       case TokenType.PLUS:
-        this.addToken({ type: TokenType.PLUS, line: this.line });
+        this.addToken({ type: TokenType.PLUS, line: this.line, lexeme: this.getLexeme() });
         break;
       case TokenType.SEMICOLON:
-        this.addToken({ type: TokenType.SEMICOLON, line: this.line });
+        this.addToken({ type: TokenType.SEMICOLON, line: this.line, lexeme: this.getLexeme() });
         break;
       case TokenType.STAR:
-        this.addToken({ type: TokenType.STAR, line: this.line });
+        this.addToken({ type: TokenType.STAR, line: this.line, lexeme: this.getLexeme() });
         break;
       case TokenType.BANG:
         this.addToken({
           type: this.match('=') ? TokenType.BANG_EQAUL : TokenType.BANG,
           line: this.line,
+          lexeme: this.getLexeme(),
         });
         break;
       case TokenType.EQUAL:
         this.addToken({
           type: this.match('=') ? TokenType.EQUAL_EQUAL : TokenType.EQUAL,
           line: this.line,
+          lexeme: this.getLexeme(),
         });
         break;
       case TokenType.GREATER:
         this.addToken({
           type: this.match('=') ? TokenType.GREATER_EQUAL : TokenType.GREATER,
           line: this.line,
+          lexeme: this.getLexeme(),
         });
         break;
       case TokenType.LESS:
         this.addToken({
           type: this.match('=') ? TokenType.LESS_EQUAL : TokenType.LESS,
           line: this.line,
+          lexeme: this.getLexeme(),
         });
         break;
       case TokenType.SLASH:
@@ -172,7 +224,7 @@ class Scanner {
             this.advance();
           }
         } else {
-          this.addToken({ type: TokenType.SLASH, line: this.line });
+          this.addToken({ type: TokenType.SLASH, line: this.line, lexeme: this.getLexeme() });
         }
         break;
       case ' ':
@@ -190,7 +242,7 @@ class Scanner {
         if (this.isDigit(char)) {
           this.number();
         } else if (this.isAlpha(char)) {
-          console.log('found identifier');
+          this.identifier();
         } else {
           Lox.reportError(this.line, 'Unexpected Character');
         }
