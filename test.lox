@@ -1,0 +1,4 @@
+// this is a test file for the lox language
+// here are a bunch of tokens
+1 + 2 + 3 = * != ! >= <= == = /
+
