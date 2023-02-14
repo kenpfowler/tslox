@@ -2,8 +2,22 @@ import Scanner from '../Scanner';
 import TokenType from '../TokenType';
 import Token from '../Token';
 
-describe('Test Scanner Implimentation: Punctuators', () => {
+function areTokenTypesAccurate(tokens: Token[], expected: TokenType[]) {
   let current = 0;
+  test.each<Token>(tokens)('Token should be identified as: $type', ({ type }) => {
+    expect(type).toBe(expected[current]);
+    current++;
+  });
+}
+
+function isTokenCountAccurate(tokens: Token[], expected: TokenType[]) {
+  const total = expected.length;
+  it(`It should return ${total} tokens`, () => {
+    expect(tokens.length).toBe(total);
+  });
+}
+
+describe('Test Scanner Implimentation: Punctuators', () => {
   const source = '(){};,+-*!===<=>=!=<>/.';
   const scanner = new Scanner(source);
   const tokens = scanner.scanForTokens();
@@ -28,20 +42,12 @@ describe('Test Scanner Implimentation: Punctuators', () => {
     TokenType.DOT,
     TokenType.EOF,
   ];
-  const total = expected.length;
 
-  it(`It should return ${total} tokens`, () => {
-    expect(tokens.length).toBe(total);
-  });
-
-  test.each<Token>(tokens)('Token should be identified as: $type', ({ type }) => {
-    expect(type).toBe(expected[current]);
-    current++;
-  });
+  isTokenCountAccurate(tokens, expected);
+  areTokenTypesAccurate(tokens, expected);
 });
 
 describe('Test Scanner Implimentation: Keywords', () => {
-  let current = 0;
   const source = 'and class else false for fun if nil or return super this true var while';
   const scanner = new Scanner(source);
   const tokens = scanner.scanForTokens();
@@ -63,20 +69,12 @@ describe('Test Scanner Implimentation: Keywords', () => {
     TokenType.WHILE,
     TokenType.EOF,
   ];
-  const total = expected.length;
 
-  it(`It should return ${total} tokens`, () => {
-    expect(tokens.length).toBe(total);
-  });
-
-  test.each<Token>(tokens)('Token should be identified as: $type', ({ type }) => {
-    expect(type).toBe(expected[current]);
-    current++;
-  });
+  isTokenCountAccurate(tokens, expected);
+  areTokenTypesAccurate(tokens, expected);
 });
 
 describe('Test Scanner Implimentation: Identifiers', () => {
-  let current = 0;
   const source =
     'andy formless fo _ _123 _abc ab123 abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_';
   const scanner = new Scanner(source);
@@ -92,38 +90,22 @@ describe('Test Scanner Implimentation: Identifiers', () => {
     TokenType.IDENTIFIER,
     TokenType.EOF,
   ];
-  const total = expected.length;
 
-  it(`It should return ${total} tokens`, () => {
-    expect(tokens.length).toBe(total);
-  });
-
-  test.each<Token>(tokens)('Token should be identified as: $type', ({ type }) => {
-    expect(type).toBe(expected[current]);
-    current++;
-  });
+  isTokenCountAccurate(tokens, expected);
+  areTokenTypesAccurate(tokens, expected);
 });
 
 describe('Test Scanner Implimentation: Strings', () => {
-  let current = 0;
   const source = '"""string"';
   const scanner = new Scanner(source);
   const tokens = scanner.scanForTokens();
   const expected = [TokenType.STRING, TokenType.STRING, TokenType.EOF];
-  const total = expected.length;
 
-  it(`It should return ${total} tokens`, () => {
-    expect(tokens.length).toBe(total);
-  });
-
-  test.each<Token>(tokens)('Token should be identified as: $type', ({ type }) => {
-    expect(type).toBe(expected[current]);
-    current++;
-  });
+  isTokenCountAccurate(tokens, expected);
+  areTokenTypesAccurate(tokens, expected);
 });
 
 describe('Test Scanner Implimentation: Numbers', () => {
-  let current = 0;
   const source = '123 123.456 .456 123.';
   const scanner = new Scanner(source);
   const tokens = scanner.scanForTokens();
@@ -136,14 +118,7 @@ describe('Test Scanner Implimentation: Numbers', () => {
     TokenType.DOT,
     TokenType.EOF,
   ];
-  const total = expected.length;
 
-  it(`It should return ${total} tokens`, () => {
-    expect(tokens.length).toBe(total);
-  });
-
-  test.each<Token>(tokens)('Token should be identified as: $type', ({ type }) => {
-    expect(type).toBe(expected[current]);
-    current++;
-  });
+  isTokenCountAccurate(tokens, expected);
+  areTokenTypesAccurate(tokens, expected);
 });
