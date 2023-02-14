@@ -17,10 +17,14 @@ function isTokenCountAccurate(tokens: Token[], expected: TokenType[]) {
   });
 }
 
+function emitTokens(source: string) {
+  const scanner = new Scanner(source);
+  return scanner.scanForTokens();
+}
+
 describe('Test Scanner Implimentation: Punctuators', () => {
   const source = '(){};,+-*!===<=>=!=<>/.';
-  const scanner = new Scanner(source);
-  const tokens = scanner.scanForTokens();
+  const tokens = emitTokens(source);
   const expected = [
     TokenType.LEFT_PAREN,
     TokenType.RIGHT_PAREN,
@@ -49,8 +53,8 @@ describe('Test Scanner Implimentation: Punctuators', () => {
 
 describe('Test Scanner Implimentation: Keywords', () => {
   const source = 'and class else false for fun if nil or return super this true var while';
-  const scanner = new Scanner(source);
-  const tokens = scanner.scanForTokens();
+  const tokens = emitTokens(source);
+
   const expected = [
     TokenType.AND,
     TokenType.CLASS,
@@ -77,8 +81,8 @@ describe('Test Scanner Implimentation: Keywords', () => {
 describe('Test Scanner Implimentation: Identifiers', () => {
   const source =
     'andy formless fo _ _123 _abc ab123 abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_';
-  const scanner = new Scanner(source);
-  const tokens = scanner.scanForTokens();
+  const tokens = emitTokens(source);
+
   const expected = [
     TokenType.IDENTIFIER,
     TokenType.IDENTIFIER,
@@ -97,8 +101,7 @@ describe('Test Scanner Implimentation: Identifiers', () => {
 
 describe('Test Scanner Implimentation: Strings', () => {
   const source = '"""string"';
-  const scanner = new Scanner(source);
-  const tokens = scanner.scanForTokens();
+  const tokens = emitTokens(source);
   const expected = [TokenType.STRING, TokenType.STRING, TokenType.EOF];
 
   isTokenCountAccurate(tokens, expected);
@@ -107,8 +110,7 @@ describe('Test Scanner Implimentation: Strings', () => {
 
 describe('Test Scanner Implimentation: Numbers', () => {
   const source = '123 123.456 .456 123.';
-  const scanner = new Scanner(source);
-  const tokens = scanner.scanForTokens();
+  const tokens = emitTokens(source);
   const expected = [
     TokenType.NUMBER,
     TokenType.NUMBER,
