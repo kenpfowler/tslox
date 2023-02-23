@@ -10,7 +10,7 @@ export class AstPrinter implements Visitor<string> {
   }
 
   visitBinaryExpression(expression: Binary) {
-    return 'string';
+    return this.parenthesize(expression.operator.lexeme ?? '', expression.left, expression.right);
   }
 
   visitGroupingExpression(expression: Grouping) {
@@ -19,12 +19,11 @@ export class AstPrinter implements Visitor<string> {
 
   visitLiteralExpression(expression: Literal) {
     if (expression.value === null) return 'nil';
-    console.log('Visist literal called with', expression.value.toString());
     return expression.value.toString();
   }
 
   visitUnaryExpression(expression: Unary) {
-    return 'string';
+    return this.parenthesize(expression.operator.lexeme ?? '', expression.expression);
   }
 
   parenthesize(name: string, ...expressions: Expression[]) {
@@ -34,6 +33,7 @@ export class AstPrinter implements Visitor<string> {
       parenthesized.push(' ');
       parenthesized.push(expression.accept(this));
     }
+
     parenthesized.push(')');
     return parenthesized.join('');
   }

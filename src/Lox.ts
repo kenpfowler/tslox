@@ -1,6 +1,8 @@
 import Scanner from './Scanner';
-import { Grouping, Literal } from './Expression';
+import { Binary, Grouping, Literal, Unary } from './Expression';
 import { AstPrinter } from './AstPrinter';
+import Token from './Token';
+import TokenType from './TokenType';
 
 class Lox {
   public static async runPrompt() {
@@ -19,9 +21,15 @@ class Lox {
   }
 
   public static prettyPrint() {
-    const string = new Literal('my String is inside a grouping');
-    const grouping = new Grouping(string);
-    const printer = new AstPrinter(grouping).print();
+    const expression = new Binary(
+      new Unary(
+        new Token({ type: TokenType.MINUS, lexeme: '-', literal: undefined, line: 1 }),
+        new Literal(123)
+      ),
+      new Token({ type: TokenType.STAR, lexeme: '*', literal: undefined, line: 1 }),
+      new Grouping(new Literal(45.67))
+    );
+    const printer = new AstPrinter(expression).print();
     console.log(printer);
   }
 }
