@@ -13,7 +13,12 @@ function main() {
   }
 
   if (!filePath) {
-    Lox.runPrompt();
+    try {
+      Lox.prettyPrint();
+      process.exit(0);
+    } catch {
+      process.exit(0);
+    }
   }
 
   const fullPath = path.resolve(process.cwd(), filePath);

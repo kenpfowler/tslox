@@ -1,10 +1,8 @@
 import Scanner from './Scanner';
-import * as readline from 'node:readline/promises';
-import { stdin as input, stdout as output } from 'node:process';
+import { Grouping, Literal } from './Expression';
+import { AstPrinter } from './AstPrinter';
 
 class Lox {
-  private rl = readline.createInterface({ input, output });
-
   public static async runPrompt() {
     throw Error('Not implimented');
   }
@@ -18,6 +16,13 @@ class Lox {
   public static reportError(line: number, message: string) {
     const msg = `[line ${line}] ${message}`;
     throw Error(msg);
+  }
+
+  public static prettyPrint() {
+    const string = new Literal('my String is inside a grouping');
+    const grouping = new Grouping(string);
+    const printer = new AstPrinter(grouping).print();
+    console.log(printer);
   }
 }
 
