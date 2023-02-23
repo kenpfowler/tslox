@@ -7,14 +7,14 @@ What is done with them will be up to the classes that use them.
 The Parser will create these trees and the Interpreter class will consume them.
 They are bridge for the Parser and Interpreter classes to communicate.
 */
-interface Visitor<R> {
+export interface Visitor<R> {
   visitBinaryExpression: (expression: Binary) => R;
   visitGroupingExpression: (expression: Grouping) => R;
   visitLiteralExpression: (expression: Literal) => R;
   visitUnaryExpression: (expression: Unary) => R;
 }
 
-abstract class Expression {
+export abstract class Expression {
   abstract accept<R>(visitor: Visitor<R>): R;
 }
 
@@ -60,8 +60,8 @@ export class Unary extends Expression {
   }
 }
 export class Literal extends Expression {
-  readonly value: object;
-  constructor(value: object) {
+  readonly value: object | string | number;
+  constructor(value: object | string | number) {
     super();
     this.value = value;
   }
