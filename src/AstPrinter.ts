@@ -5,8 +5,7 @@ import { Binary, Expression, Grouping, Literal, Unary, Visitor } from './Express
 export class AstPrinter implements Visitor<string> {
   expression: Expression;
 
-  constructor(expression: Expression) 
-  {
+  constructor(expression: Expression) {
     this.expression = expression;
   }
 
