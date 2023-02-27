@@ -6,8 +6,8 @@
   "scripts": {
     "start": "ts-node main.ts",
     "lint": "eslint . --ext .ts",
-    "prettier:check": "prettier --check .",
-    "prettier:format": "prettier --write .",
+    "prettier:check": "prettier --check ../",
+    "prettier:format": "prettier --write ../",
     "test": "jest"
   },
   "keywords": [],

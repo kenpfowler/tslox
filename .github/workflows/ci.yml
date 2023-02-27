@@ -2,10 +2,29 @@ name: Continuous Integration
 
 on:
   pull_request:
+    # default value of types is [opened, synchronize, reopened]
+    types: [ closed, opened, synchronize, reopened ]
   push:
     branches:
       - main
 jobs:
+  if_merged:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          # Make sure the actual branch is checked out when running on pull requests
+          ref: ${{ github.head_ref }}
+
+      - name: Prettify code
+        uses: creyD/prettier_action@v4.3
+        with:
+          # This part is also where you can pass other options, for example:
+          prettier_version: 2.8.3
+          prettier_options: --write **/*.{js,ts,md,json,yml}
+
   lint:
     runs-on: ubuntu-latest
     steps:
@@ -32,6 +51,11 @@ jobs:
         run: just lint
 
   prettier:
+    needs: if_merged
+      if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
