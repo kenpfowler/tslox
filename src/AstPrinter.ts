@@ -5,18 +5,15 @@ import { Binary, Expression, Grouping, Literal, Unary, Visitor } from './Express
 export class AstPrinter implements Visitor<string> {
   expression: Expression;
 
-  constructor(expression: Expression) 
-  {
+  constructor(expression: Expression) {
     this.expression = expression;
   }
 
-  visitBinaryExpression(expression: Binary) 
-  {
+  visitBinaryExpression(expression: Binary) {
     return this.parenthesize(expression.operator.lexeme ?? '', expression.left, expression.right);
   }
 
-  visitGroupingExpression(expression: Grouping) 
-  {
+  visitGroupingExpression(expression: Grouping) {
     return this.parenthesize('group', expression.expression);
   }
 
