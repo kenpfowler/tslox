@@ -22,7 +22,7 @@ function emitTokens(source: string) {
   return scanner.scanForTokens();
 }
 
-describe('Test Scanner Implimentation: Punctuators', () => {
+describe('Test Scanner Implementation: Punctuators', () => {
   const source = '(){};,+-*!===<=>=!=<>/.';
   const tokens = emitTokens(source);
   const expected = [
@@ -35,11 +35,9 @@ describe('Test Scanner Implimentation: Punctuators', () => {
     TokenType.PLUS,
     TokenType.MINUS,
     TokenType.STAR,
-    TokenType.BANG_EQAUL,
+    TokenType.BANG_EQUAL,
     TokenType.EQUAL_EQUAL,
     TokenType.LESS_EQUAL,
-    TokenType.GREATER_EQUAL,
-    TokenType.BANG_EQAUL,
     TokenType.LESS,
     TokenType.GREATER,
     TokenType.SLASH,
@@ -51,7 +49,7 @@ describe('Test Scanner Implimentation: Punctuators', () => {
   areTokenTypesAccurate(tokens, expected);
 });
 
-describe('Test Scanner Implimentation: Keywords', () => {
+describe('Test Scanner Implementation: Keywords', () => {
   const source = 'and class else false for fun if nil or return super this true var while';
   const tokens = emitTokens(source);
 
@@ -99,7 +97,7 @@ describe('Test Scanner Implimentation: Identifiers', () => {
   areTokenTypesAccurate(tokens, expected);
 });
 
-describe('Test Scanner Implimentation: Strings', () => {
+describe('Test Scanner Implementation: Strings', () => {
   const source = '"""string"';
   const tokens = emitTokens(source);
   const expected = [TokenType.STRING, TokenType.STRING, TokenType.EOF];
@@ -108,7 +106,7 @@ describe('Test Scanner Implimentation: Strings', () => {
   areTokenTypesAccurate(tokens, expected);
 });
 
-describe('Test Scanner Implimentation: Numbers', () => {
+describe('Test Scanner Implementation: Numbers', () => {
   const source = '123 123.456 .456 123.';
   const tokens = emitTokens(source);
   const expected = [

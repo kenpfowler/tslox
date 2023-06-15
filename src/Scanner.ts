@@ -192,7 +192,7 @@ class Scanner {
         break;
       case TokenType.BANG:
         this.addToken({
-          type: this.match('=') ? TokenType.BANG_EQAUL : TokenType.BANG,
+          type: this.match('=') ? TokenType.BANG_EQUAL : TokenType.BANG,
           line: this.line,
           lexeme: this.getLexeme(),
         });

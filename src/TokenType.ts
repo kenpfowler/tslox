@@ -14,7 +14,7 @@ enum TokenType {
 
   // one or two character tokens
   BANG = '!',
-  BANG_EQAUL = '!=',
+  BANG_EQUAL = '!=',
   EQUAL = '=',
   EQUAL_EQUAL = '==',
   GREATER = '>',

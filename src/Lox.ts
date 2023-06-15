@@ -6,7 +6,7 @@ import TokenType from './TokenType';
 
 class Lox {
   public static async runPrompt() {
-    throw Error('Not implimented');
+    throw Error('Not Implemented');
   }
 
   static run(source: string) {
