@@ -38,6 +38,8 @@ describe('Test Scanner Implementation: Punctuators', () => {
     TokenType.BANG_EQUAL,
     TokenType.EQUAL_EQUAL,
     TokenType.LESS_EQUAL,
+    TokenType.GREATER_EQUAL,
+    TokenType.BANG_EQUAL,
     TokenType.LESS,
     TokenType.GREATER,
     TokenType.SLASH,
