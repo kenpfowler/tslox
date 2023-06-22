@@ -23,7 +23,7 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v2.0.1
         with:
-          version: 7
+          version: 8.6.3
 
       - name: Install dependencies
         run: just pnpm install
@@ -65,7 +65,7 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v2.0.1
         with:
-          version: 7
+          version: 8.6.3
 
       - name: Install dependencies
         run: just pnpm install
