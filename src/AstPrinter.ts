@@ -1,6 +1,6 @@
 import { Binary, Expression, Grouping, Literal, Unary, Visitor } from './Expression';
 
-// pass any expression to the AstPrinter => retrun a print representation of that tree with brackets denoting the nesting.
+// pass any expression to the AstPrinter => return a print representation of that tree with brackets denoting the nesting.
 // ex:
 export class AstPrinter implements Visitor<string> {
   expression: Expression;

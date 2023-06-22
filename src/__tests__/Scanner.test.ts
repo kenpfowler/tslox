@@ -78,7 +78,7 @@ describe('Test Scanner Implementation: Keywords', () => {
   areTokenTypesAccurate(tokens, expected);
 });
 
-describe('Test Scanner Implimentation: Identifiers', () => {
+describe('Test Scanner Implementation: Identifiers', () => {
   const source =
     'andy formless fo _ _123 _abc ab123 abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_';
   const tokens = emitTokens(source);

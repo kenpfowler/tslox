@@ -14,6 +14,7 @@ function main() {
 
   if (!filePath) {
     try {
+      // TODO: figure out how to accept user input so that we can run this as a REPL
       Lox.prettyPrint();
       process.exit(0);
     } catch {
