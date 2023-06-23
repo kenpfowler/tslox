@@ -22,6 +22,7 @@ function emitTokens(source: string) {
   return scanner.scanForTokens();
 }
 
+// TODO: source file for tests should be an actual .lox file
 describe('Test Scanner Implementation: Punctuators', () => {
   const source = '(){};,+-*!===<=>=!=<>/.';
   const tokens = emitTokens(source);
@@ -103,6 +104,15 @@ describe('Test Scanner Implementation: Strings', () => {
   const source = '"""string"';
   const tokens = emitTokens(source);
   const expected = [TokenType.STRING, TokenType.STRING, TokenType.EOF];
+
+  isTokenCountAccurate(tokens, expected);
+  areTokenTypesAccurate(tokens, expected);
+});
+
+describe('Test Scanner Implementation: Comments', () => {
+  const source = 'abcdefg /* abcdefg */';
+  const tokens = emitTokens(source);
+  const expected = [TokenType.IDENTIFIER, TokenType.EOF];
 
   isTokenCountAccurate(tokens, expected);
   areTokenTypesAccurate(tokens, expected);

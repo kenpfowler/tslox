@@ -152,6 +152,32 @@ class Scanner {
     return this.source.substring(this.start, this.current);
   }
 
+  private commentBlock() {
+    while (!this.isAtEnd()) {
+      if (this.peek() === '*' && this.peekNext() === '/') {
+        break;
+      }
+
+      if (this.peek() == '\n') {
+        this.line++;
+      }
+
+      this.advance();
+    }
+
+    if (this.isAtEnd()) {
+      Lox.reportError(this.line, 'Unterminated Comment Block');
+    }
+
+    this.current = this.current + 2;
+  }
+
+  private comment() {
+    while (!this.isAtEnd() && this.peek() !== '\n') {
+      this.advance();
+    }
+  }
+
   private scanToken() {
     const char = this.advance();
 
@@ -220,9 +246,9 @@ class Scanner {
         break;
       case TokenType.SLASH:
         if (this.match('/')) {
-          while (!this.isAtEnd() && this.peek() !== '\n') {
-            this.advance();
-          }
+          this.comment();
+        } else if (this.match('*')) {
+          this.commentBlock();
         } else {
           this.addToken({ type: TokenType.SLASH, line: this.line, lexeme: this.getLexeme() });
         }
