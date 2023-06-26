@@ -19,7 +19,7 @@ export class AstPrinter implements Visitor<string> {
 
   visitLiteralExpression(expression: Literal) {
     if (expression.value === null) return 'nil';
-    return expression.value.toString();
+    return expression.value?.toString() ?? '';
   }
 
   visitUnaryExpression(expression: Unary) {

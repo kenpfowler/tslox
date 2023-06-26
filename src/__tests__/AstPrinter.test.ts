@@ -3,7 +3,7 @@ import { Binary, Unary, Literal, Grouping } from '../Expression';
 import Token from '../Token';
 import TokenType from '../TokenType';
 
-describe('Test Scanner Implimentation: Punctuators', () => {
+describe('Test Scanner Implementation: Punctuators', () => {
   const expected = '(* (- 123) (group 45.67))';
   const expression = new Binary(
     new Unary(
@@ -13,9 +13,9 @@ describe('Test Scanner Implimentation: Punctuators', () => {
     new Token({ type: TokenType.STAR, lexeme: '*', literal: undefined, line: 1 }),
     new Grouping(new Literal(45.67))
   );
-  const printer = new AstPrinter(expression).print();
+  const result = new AstPrinter(expression).print();
 
   it(`It should return expected printed ast`, () => {
-    expect(printer).toBe(expected);
+    expect(result).toBe(expected);
   });
 });

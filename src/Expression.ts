@@ -60,8 +60,8 @@ export class Unary extends Expression {
   }
 }
 export class Literal extends Expression {
-  readonly value: object | string | number;
-  constructor(value: object | string | number) {
+  readonly value: object | string | number | boolean | null | undefined;
+  constructor(value: object | string | number | boolean | null | undefined) {
     super();
     this.value = value;
   }

@@ -13,9 +13,9 @@ class Token {
   readonly line: number;
 
   constructor(args: ITokenType) {
-    this.lexeme = args.lexeme ? args.lexeme : undefined;
+    this.lexeme = args.lexeme ?? undefined;
     this.type = args.type;
-    this.literal = args.literal ? args.literal : undefined;
+    this.literal = args.literal ?? undefined;
     this.line = args.line;
   }
 
