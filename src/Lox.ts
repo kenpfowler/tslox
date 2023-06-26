@@ -31,7 +31,7 @@ class Lox {
     }
   }
   private static report(line: number, where: string, message: string) {
-    console.log('[line ' + line + '] Error' + where + ': ' + message);
+    console.error('[line ' + line + '] Error' + where + ': ' + message);
     this.hadError = true;
   }
 }

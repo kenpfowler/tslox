@@ -108,7 +108,7 @@ class Parser {
       return new Grouping(expr);
     }
 
-    throw new Error(`${this.peek()}, Expect expression.`);
+    throw this.error(this.peek(), 'Expect expression.');
   }
 
   private consume(type: TokenType, message: string) {

@@ -1,6 +1,7 @@
 import path from 'path';
 import fs from 'fs';
 import Lox from './Lox';
+import { AstPrinter } from './AstPrinter';
 
 // we want to drop the user into a REPL for our interpreter if there is no file path provided.
 function main() {
@@ -31,7 +32,15 @@ function main() {
     }
 
     console.log(`Running tslox interpreter on file -> ${fullPath}:`);
-    console.log(Lox.run(data));
+
+    const maybeTree = Lox.run(data);
+    if (maybeTree) {
+      const printer = new AstPrinter(maybeTree);
+      console.log(printer.print());
+    } else {
+      console.log("Couldn't generate tree");
+    }
+
     process.exit(0);
   });
 }
