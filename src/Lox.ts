@@ -1,10 +1,11 @@
 import Scanner from './Scanner';
-import { Binary, Grouping, Literal, Unary } from './Expression';
-import { AstPrinter } from './AstPrinter';
 import Token from './Token';
 import TokenType from './TokenType';
+import Parser from './Parser';
 
 class Lox {
+  private static hadError: boolean = false;
+
   public static async runPrompt() {
     throw Error('Not Implemented');
   }
@@ -12,7 +13,9 @@ class Lox {
   static run(source: string) {
     const scanner = new Scanner(source);
     const tokens = scanner.scanForTokens();
-    return tokens;
+    const parser = new Parser(tokens);
+    const tree = parser.parse();
+    return tree;
   }
 
   public static reportError(line: number, message: string) {
@@ -20,17 +23,16 @@ class Lox {
     throw Error(msg);
   }
 
-  public static prettyPrint() {
-    const expression = new Binary(
-      new Unary(
-        new Token({ type: TokenType.MINUS, lexeme: '-', literal: undefined, line: 1 }),
-        new Literal(123)
-      ),
-      new Token({ type: TokenType.STAR, lexeme: '*', literal: undefined, line: 1 }),
-      new Grouping(new Literal(45.67))
-    );
-    const printer = new AstPrinter(expression).print();
-    console.log(printer);
+  public static error(token: Token, message: string) {
+    if (token.type === TokenType.EOF) {
+      this.report(token.line, ' at end', message);
+    } else {
+      this.report(token.line, " at '" + token.lexeme + "'", message);
+    }
+  }
+  private static report(line: number, where: string, message: string) {
+    console.log('[line ' + line + '] Error' + where + ': ' + message);
+    this.hadError = true;
   }
 }
 
