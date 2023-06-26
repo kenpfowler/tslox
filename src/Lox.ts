@@ -4,7 +4,7 @@ import TokenType from './TokenType';
 import Parser from './Parser';
 
 class Lox {
-  private static hadError: boolean = false;
+  private static hadError = false;
 
   public static async runPrompt() {
     throw Error('Not Implemented');

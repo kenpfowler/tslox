@@ -11,7 +11,7 @@ import TokenType from './TokenType';
 
 class Parser {
   private readonly tokens: Array<Token>;
-  private current: number = 0;
+  private current = 0;
 
   constructor(tokens: Array<Token>) {
     this.tokens = tokens;
@@ -30,7 +30,7 @@ class Parser {
   }
 
   private equality() {
-    let expression: Expression = this.comparison();
+    let expression = this.comparison();
 
     while (this.match(TokenType.BANG_EQUAL, TokenType.EQUAL_EQUAL)) {
       const operator = this.previous();
@@ -103,7 +103,7 @@ class Parser {
     }
 
     if (this.match(TokenType.LEFT_PAREN)) {
-      let expr = this.expression();
+      const expr = this.expression();
       this.consume(TokenType.RIGHT_PAREN, "Expect ')' after expression.");
       return new Grouping(expr);
     }
