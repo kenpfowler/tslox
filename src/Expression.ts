@@ -48,11 +48,11 @@ export class Grouping extends Expression {
 }
 export class Unary extends Expression {
   readonly operator: Token;
-  readonly expression: Expression;
+  readonly right: Expression;
   constructor(token: Token, expression: Expression) {
     super();
     this.operator = token;
-    this.expression = expression;
+    this.right = expression;
   }
 
   public accept<R>(visitor: Visitor<R>): R {

@@ -23,7 +23,7 @@ export class AstPrinter implements Visitor<string> {
   }
 
   visitUnaryExpression(expression: Unary) {
-    return this.parenthesize(expression.operator.lexeme ?? '', expression.expression);
+    return this.parenthesize(expression.operator.lexeme ?? '', expression.right);
   }
 
   parenthesize(name: string, ...expressions: Expression[]) {
