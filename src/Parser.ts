@@ -1,6 +1,7 @@
 import { Binary, Expression, Grouping, Literal, Unary } from './Expression';
 import Lox from './Lox';
 import ParseError from './ParseError';
+import { ExpressionStatement, PrintStatement, Statement } from './Statement';
 import Token from './Token';
 import TokenType from './TokenType';
 
@@ -17,12 +18,30 @@ class Parser {
     this.tokens = tokens;
   }
 
-  public parse() {
-    try {
-      return this.expression();
-    } catch (error) {
-      return null;
+  parse() {
+    const statements = new Array<Statement>();
+    while (!this.isAtEnd()) {
+      statements.push(this.statement());
     }
+
+    return statements;
+  }
+
+  private statement() {
+    if (this.match(TokenType.PRINT)) return this.printStatement();
+    return this.expressionStatement();
+  }
+
+  private printStatement() {
+    const value = this.expression();
+    this.consume(TokenType.SEMICOLON, "Expect ';' after value.");
+    return new PrintStatement(value);
+  }
+
+  private expressionStatement() {
+    const expression = this.expression();
+    this.consume(TokenType.SEMICOLON, "Expect ';' after expression.");
+    return new ExpressionStatement(expression);
   }
 
   private expression() {
