@@ -1,14 +1,16 @@
 import { Visitor, Expression, Binary, Unary, Grouping, Literal } from './Expression';
 import Lox from './Lox';
 import RuntimeError from './RuntimeError';
+import { ExpressionStatement, PrintStatement, Statement, StatementVisitor } from './Statement';
 import Token, { LoxLiteral } from './Token';
 import TokenType from './TokenType';
 
-class Interpreter implements Visitor<LoxLiteral> {
-  public interpret(expression: Expression) {
+class Interpreter implements Visitor<LoxLiteral>, StatementVisitor<void> {
+  public interpret(statements: Array<Statement>) {
     try {
-      const output = this.evaluate(expression);
-      return this.stringify(output);
+      for (const statement of statements) {
+        this.execute(statement);
+      }
     } catch (error) {
       if (error instanceof RuntimeError) Lox.runtimeError(error);
     }
@@ -35,6 +37,10 @@ class Interpreter implements Visitor<LoxLiteral> {
   // not sure how to type this
   private evaluate(expression: Expression): LoxLiteral {
     return expression.accept(this);
+  }
+
+  private execute(statement: Statement) {
+    statement.accept(this);
   }
 
   private isTruthy(arg: LoxLiteral) {
@@ -125,6 +131,17 @@ class Interpreter implements Visitor<LoxLiteral> {
 
   visitLiteralExpression(expression: Literal) {
     return expression.value;
+  }
+
+  visitPrintStatement(statement: PrintStatement) {
+    const expression = this.evaluate(statement.expression);
+    console.log(this.stringify(expression));
+    return null;
+  }
+
+  visitExpressionStatement(statement: ExpressionStatement) {
+    this.evaluate(statement.expression);
+    return null;
   }
 }
 export default Interpreter;
