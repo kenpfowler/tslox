@@ -1,17 +1,1 @@
-// Make sure the scanner can properly emit tokens for all these lexemes
-(){};,+-*!===<=>=!=<>/.
-"string"
-"another string"
-/* 
-(){};,+-*!===<=>=!=<>/.
-"string"
-/*
-"another string"
-*/
-123 
-123.25
-//
-
-
-
-var myvar = "my string variables"
+1 / "2"

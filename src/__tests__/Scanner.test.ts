@@ -1,6 +1,6 @@
 import Scanner from '../Scanner';
-import TokenType from '../TokenType';
 import Token from '../Token';
+import TokenType from '../TokenType';
 
 function areTokenTypesAccurate(tokens: Token[], expected: TokenType[]) {
   let current = 0;
