@@ -2,38 +2,54 @@ import Lox from '../../../Lox';
 import path from 'path';
 import fs from 'fs';
 
-function initTest(folder: string, test: string) {
+function runTest(folder: string, test: string, results: string[]) {
   const fullPath = path.resolve(process.cwd(), `./__tests__/interpreter/${folder}/${test}`);
   const data = fs.readFileSync(fullPath, 'utf8');
-  const expression = Lox.run(data);
-  return expression;
+  const consoleSpy = jest.spyOn(console, 'log');
+  Lox.run(data);
+
+  for (let index = 1; index < results.length + 1; index++) {
+    expect(consoleSpy).toHaveBeenNthCalledWith(index, results[index - 1]);
+  }
 }
 
 describe('Interpreter Class', () => {
   describe('operators', () => {
-    test('adds 1 + 2 + 3 correctly', () => {
-      const output = initTest('operator', 'add.lox');
-      expect(output).toBe('6');
+    beforeEach(() => {
+      jest.resetAllMocks();
     });
 
-    test("concatenates 'Hello, ' + 'World!' correctly", () => {
-      const output = initTest('operator', 'concat.lox');
-      expect(output).toBe('Hello, World!');
+    test('adds numbers and strings correctly', () => {
+      runTest('operator', 'add.lox', ['579', 'string']);
     });
 
-    test('divides 8 / 2 correctly', () => {
-      const output = initTest('operator', 'divide.lox');
-      expect(output).toBe('4');
+    test('evaluates comparisons correctly', () => {
+      runTest('operator', 'comparison.lox', [
+        'true',
+        'false',
+        'false',
+        'true',
+        'true',
+        'false',
+        'false',
+        'false',
+        'true',
+        'false',
+        'true',
+        'true',
+        'false',
+        'false',
+        'false',
+        'false',
+        'true',
+        'true',
+        'true',
+        'true',
+      ]);
     });
 
-    test('divides 12.34 / 12.34 correctly', () => {
-      const output = initTest('operator', 'divide_2.lox');
-      expect(output).toBe('1');
-    });
-
-    test('evaluates 1 == 1 correctly', () => {
-      const output = initTest('operator', 'equality.lox');
-      expect(output).toBe('true');
+    test('divides numbers correctly', () => {
+      runTest('operator', 'divide.lox', ['4', '1']);
     });
   });
 });
