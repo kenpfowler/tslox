@@ -4,7 +4,6 @@ import TokenType from './TokenType';
 import Parser from './Parser';
 import RuntimeError from './RuntimeError';
 import Interpreter from './Interpreter';
-import { Expression } from './Expression';
 
 class Lox {
   private static readonly interpreter = new Interpreter();

@@ -5,8 +5,6 @@ import Token, { LoxLiteral } from './Token';
 import TokenType from './TokenType';
 
 class Interpreter implements Visitor<LoxLiteral> {
-  constructor() {}
-
   public interpret(expression: Expression) {
     try {
       const output = this.evaluate(expression);

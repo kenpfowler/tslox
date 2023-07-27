@@ -1,7 +1,6 @@
 import Lox from '../../../Lox';
 import path from 'path';
 import fs from 'fs';
-import RuntimeError from '../../../RuntimeError';
 
 function initTest(folder: string, test: string) {
   const fullPath = path.resolve(process.cwd(), `./__tests__/interpreter/${folder}/${test}`);
