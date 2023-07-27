@@ -1,4 +1,4 @@
-import Token from './Token';
+import Token, { LoxLiteral } from './Token';
 
 /*
 These Expression classes are meant to represent our syntax tree structures.
@@ -60,8 +60,9 @@ export class Unary extends Expression {
   }
 }
 export class Literal extends Expression {
-  readonly value: object | string | number | boolean | null | undefined;
-  constructor(value: object | string | number | boolean | null | undefined) {
+  // in our java implementation we're using the Object type to represent all lox values.  How can we do this in javascript?
+  readonly value: LoxLiteral;
+  constructor(value: LoxLiteral) {
     super();
     this.value = value;
   }

@@ -88,7 +88,7 @@ class Scanner {
       type: TokenType.STRING,
       lexeme: string,
       line: this.line,
-      literal: new String(string),
+      literal: String(string),
     });
   }
 
@@ -112,7 +112,7 @@ class Scanner {
     this.addToken({
       type: TokenType.NUMBER,
       lexeme: this.getLexeme(),
-      literal: new Number(this.getLexeme()),
+      literal: Number(this.getLexeme()),
       line: this.line,
     });
   }

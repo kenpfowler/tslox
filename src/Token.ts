@@ -1,14 +1,16 @@
 import TokenType from './TokenType';
+export type LoxLiteral = number | object | string | null | boolean | undefined;
+
 export interface ITokenType {
   lexeme?: string;
-  literal?: object;
+  literal?: LoxLiteral;
   type: TokenType;
   line: number;
 }
 
 class Token {
   readonly lexeme: string | undefined;
-  readonly literal: object | undefined;
+  readonly literal: LoxLiteral;
   readonly type: TokenType;
   readonly line: number;
 
