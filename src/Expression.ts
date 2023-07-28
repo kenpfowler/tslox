@@ -7,15 +7,16 @@ What is done with them will be up to the classes that use them.
 The Parser will create these trees and the Interpreter class will consume them.
 They are bridge for the Parser and Interpreter classes to communicate.
 */
-export interface Visitor<R> {
+
+export abstract class Expression {
+  abstract accept<R>(visitor: Visitor<R>): R;
+}
+
+interface Visitor<R> {
   visitBinaryExpression: (expression: Binary) => R;
   visitGroupingExpression: (expression: Grouping) => R;
   visitLiteralExpression: (expression: Literal) => R;
   visitUnaryExpression: (expression: Unary) => R;
-}
-
-export abstract class Expression {
-  abstract accept<R>(visitor: Visitor<R>): R;
 }
 
 export class Binary extends Expression {
