@@ -1,11 +1,11 @@
 import { Visitor, Expression, Binary, Unary, Grouping, Literal } from './Expression';
 import Lox from './Lox';
 import RuntimeError from './RuntimeError';
-import { ExpressionStatement, PrintStatement, Statement, StatementVisitor } from './Statement';
+import { ExpressionStatement, PrintStatement, Statement, Visitor } from './Statement';
 import Token, { LoxLiteral } from './Token';
 import TokenType from './TokenType';
 
-class Interpreter implements Visitor<LoxLiteral>, StatementVisitor<void> {
+class Interpreter implements Visitor<LoxLiteral>, Visitor<void> {
   public interpret(statements: Array<Statement>) {
     try {
       for (const statement of statements) {

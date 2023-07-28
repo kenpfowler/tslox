@@ -14,8 +14,7 @@ function main() {
 
   if (!filePath) {
     try {
-      // TODO: figure out how to accept user input so that we can run this as a REPL
-      console.log('TODO: implement REPL');
+      Lox.runPrompt();
       process.exit(0);
     } catch (e) {
       process.exit(0);
@@ -31,8 +30,7 @@ function main() {
     }
 
     console.log(`Running tslox interpreter on file -> ${fullPath}:`);
-    const output = Lox.run(data);
-    if (output) console.log(output);
+    Lox.run(data);
     process.exit(0);
   });
 }

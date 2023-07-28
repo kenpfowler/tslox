@@ -4,6 +4,7 @@ import TokenType from './TokenType';
 import Parser from './Parser';
 import RuntimeError from './RuntimeError';
 import Interpreter from './Interpreter';
+import readline from 'readline';
 
 class Lox {
   private static readonly interpreter = new Interpreter();
@@ -15,19 +16,28 @@ class Lox {
     this.hadRuntimeError = true;
   }
 
-  public static async runPrompt() {
-    throw Error('Not Implemented');
+  public static runPrompt() {
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
+    });
+    rl.setPrompt('>');
+    rl.prompt();
+    rl.on('line', (input) => {
+      Lox.run(input);
+      rl.prompt();
+    });
   }
 
   static run(source: string) {
     const scanner = new Scanner(source);
     const tokens = scanner.scanForTokens();
     const parser = new Parser(tokens);
-    const tree = parser.parse();
+    const statements = parser.parse();
     if (this.hadError) process.exit(65);
     if (this.hadRuntimeError) process.exit(70);
 
-    if (tree) return this.interpreter.interpret(tree);
+    this.interpreter.interpret(statements);
   }
 
   public static reportError(line: number, message: string) {

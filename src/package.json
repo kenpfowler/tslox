@@ -8,7 +8,8 @@
     "lint": "eslint . --ext .ts",
     "prettier:check": "prettier --check ../",
     "prettier:format": "prettier --write ../",
-    "test": "jest"
+    "test": "jest",
+    "scaffold": "ts-node ./tool/GenerateAst.ts && prettier --write ../"
   },
   "keywords": [],
   "author": "Ken Fowler",
