@@ -11,11 +11,11 @@
     pnpm -C src run lint
 
 # Run prettier
-@prettier-format:
+@format:
     pnpm -C src run prettier:format
 
 # Check code styles
-@prettier-check:
+@check:
     pnpm -C src run prettier:check
 
 # Test code

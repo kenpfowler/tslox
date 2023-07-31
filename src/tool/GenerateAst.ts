@@ -8,8 +8,9 @@ class GenerateAst {
     this.defineBase(baseName);
     this.defineVisitors(baseName, types);
     this.defineTypes(baseName, types);
+
     try {
-      fs.writeFileSync(outputDir, this.output);
+      fs.writeFileSync(`${outputDir}/${baseName}.ts`, this.output);
     } catch (err) {
       console.error(err);
     }
@@ -23,14 +24,14 @@ class GenerateAst {
       baseName +
       ' {' +
       '\n' +
-      'abstract accept<R>(visitor: Visitor<R>): R' +
+      `abstract accept<R>(visitor: ${baseName}Visitor<R>): R` +
       '\n' +
       '}' +
       '\n \n';
   }
 
   private static defineVisitors(baseName: string, types: Map<string, string>) {
-    this.output += 'interface Visitor<R> {' + '\n';
+    this.output += `export interface ${baseName}Visitor<R> {` + '\n';
 
     types.forEach((_value, key) => {
       this.output += `visit${key}${baseName}: (${baseName.toLowerCase()}: ${key}) => R;` + '\n';
@@ -70,7 +71,7 @@ class GenerateAst {
       this.initProperties(value);
       this.output += '}' + '\n';
       this.output +=
-        `public accept<R>(visitor: Visitor<R>): R {` +
+        `public accept<R>(visitor: ${baseName}Visitor<R>): R {` +
         '\n' +
         `return visitor.visit${key}${baseName}(this);` +
         '\n' +
@@ -81,28 +82,26 @@ class GenerateAst {
   }
 }
 
-(() => {
+(function main() {
   GenerateAst.defineAst(
-    'Expression',
+    'Expr',
     path.resolve(process.cwd()),
     new Map([
-      ['Binary', 'left: Expression, operator: Token, right: Expression'],
-      ['Grouping', 'expression: Expression'],
+      ['Binary', 'left: Expr, operator: Token, right: Expr'],
+      ['Grouping', 'expr: Expr'],
       ['Literal', 'value: LoxLiteral'],
-      ['Unary', 'operator: Token, right: Expression'],
+      ['Unary', 'operator: Token, right: Expr'],
       ['Variable', 'name: Token'],
     ])
   );
 
-  // GenerateAst.defineAst(
-  //   'Statement',
-  //   path.resolve(process.cwd()),
-  //   new Map([
-  //     ['Binary', 'left: Expression, operator: Token, right: Expression'],
-  //     ['Grouping', 'expression: Expression'],
-  //     ['Literal', 'value: LoxLiteral'],
-  //     ['Unary', 'operator: Token, right: Expression'],
-  //     ['Variable', 'name: Token'],
-  //   ])
-  // );
+  GenerateAst.defineAst(
+    'Stmt',
+    path.resolve(process.cwd()),
+    new Map([
+      ['ExpressionStatement', 'expr: Expr'],
+      ['Print', 'expression: Expr'],
+      ['Var', 'name: Token, initializer: Expr'],
+    ])
+  );
 })();
