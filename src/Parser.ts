@@ -40,7 +40,7 @@ import TokenType from './TokenType';
  */
 
 /**
- * Attempts to match a series of tokens to a corresponding statement and/or expression as per the lox grammar
+ * Attempts to match a series of tokens to a corresponding statement and/or expression as per the lox grammar using the recursive descent technique
  */
 class Parser {
   private readonly tokens: Array<Token>;
