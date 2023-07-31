@@ -31,12 +31,12 @@ class Environment {
   public assign(name: Token, value: LoxLiteral) {
     const variable = this.values.get(name.lexeme);
 
-    if (variable) {
-      this.values.set(name.lexeme, value);
-      return;
+    if (variable === undefined) {
+      throw new RuntimeError(name, "Undefined variable '" + name.lexeme + "'.");
     }
 
-    throw new RuntimeError(name, "Undefined variable '" + name.lexeme + "'.");
+    this.values.set(name.lexeme, value);
+    return;
   }
 
   /**
