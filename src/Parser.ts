@@ -1,4 +1,5 @@
-import { Binary, Expr, Grouping, Literal, Unary, Variable } from './Expr';
+import exp from 'constants';
+import { Assign, Binary, Expr, Grouping, Literal, Unary, Variable } from './Expr';
 import Lox from './Lox';
 import ParseError from './ParseError';
 import { ExpressionStatement, Print, Stmt, Var } from './Stmt';
@@ -39,7 +40,7 @@ import TokenType from './TokenType';
  */
 
 /**
- * Attempts to assemble a list of valid statements and expressions given a list of tokens
+ * Attempts to match a series of tokens to a corresponding statement and/or expression as per the lox grammar
  */
 class Parser {
   private readonly tokens: Array<Token>;
@@ -49,7 +50,11 @@ class Parser {
     this.tokens = tokens;
   }
 
-  parse() {
+  /**
+   * attempts to parse tokens into a list of statements according to the lox grammar
+   * @returns an array of statements
+   */
+  public parse() {
     const statements = new Array<Stmt>();
     while (!this.isAtEnd()) {
       statements.push(this.declaration());
@@ -58,10 +63,14 @@ class Parser {
     return statements;
   }
 
+  /**
+   * Attempts to return a declaration → classDecl | funDecl | varDecl | statement
+   * declaration → classDecl | funDecl | varDecl | statement
+   * @returns
+   */
   private declaration() {
     try {
       if (this.match(TokenType.VAR)) return this.varDeclaration();
-
       return this.statement();
     } catch (error) {
       if (error instanceof ParseError) {
@@ -73,10 +82,15 @@ class Parser {
     }
   }
 
+  /**
+   * attempts to return a variable declaration
+   * varDecl → "var" IDENTIFIER ( "=" expression )? ";"
+   * @returns Stmt.Var
+   */
   private varDeclaration() {
     const name = this.consume(TokenType.IDENTIFIER, 'Expect variable name.');
 
-    let initializer = null;
+    let initializer: Expr = new Literal(null);
 
     if (this.match(TokenType.EQUAL)) {
       initializer = this.expression();
@@ -84,9 +98,7 @@ class Parser {
 
     this.consume(TokenType.SEMICOLON, "Expect ';' after variable declaration.");
 
-    // FIXME: this is a bandaid. Apperently typed java objects can be initialized as null and still be passed around as the type they are labeled as.
-    // This doesn't work in typescript.  Our constructor expects an expression but the value returned is possibly null.
-    return new Var(name, initializer as Expr);
+    return new Var(name, initializer);
   }
 
   private statement() {
@@ -106,8 +118,30 @@ class Parser {
     return new ExpressionStatement(value);
   }
 
+  /**
+   * expression → assignment
+   * @returns
+   */
   private expression() {
-    return this.equality();
+    return this.assignment();
+  }
+
+  private assignment() {
+    const expr = this.equality();
+
+    if (this.match(TokenType.EQUAL)) {
+      const equals = this.previous();
+      const value: Expr = this.assignment();
+
+      if (expr instanceof Variable) {
+        const name = new Variable(expr.name).name; // ((Expr.Variable)expr).name;
+        return new Assign(name, value);
+      }
+
+      this.error(equals, 'Invalid assignment target.');
+    }
+
+    return expr;
   }
 
   private equality() {
@@ -122,6 +156,10 @@ class Parser {
     return expression;
   }
 
+  /**
+   *
+   * @returns the previous token
+   */
   private previous() {
     return this.tokens[this.current - 1];
   }
@@ -198,9 +236,17 @@ class Parser {
     throw this.error(this.peek(), 'Expect expression.');
   }
 
+  /**
+   * expects the current token to match the type and for the parser to advance.
+   * if this fails an error will be thrown
+   * @param type token type
+   * @param message error message to be reported
+   * @returns the previous token
+   */
   private consume(type: TokenType, message: string) {
     if (this.check(type)) return this.advance();
-    throw new Error(message);
+
+    throw this.error(this.peek(), message);
   }
 
   private error(token: Token, message: string) {
@@ -208,24 +254,47 @@ class Parser {
     return new ParseError();
   }
 
+  /**
+   *
+   * @param type a token type
+   * @returns return a true if the current token matches the type
+   */
   private check(type: TokenType) {
     if (this.isAtEnd()) return false;
     return this.peek().type === type;
   }
 
+  /**
+   *
+   * @returns the current token being parsed
+   */
   private peek() {
     return this.tokens[this.current];
   }
 
+  /**
+   *
+   * @returns a boolean indicating if we have reached the last token
+   */
   private isAtEnd() {
     return this.peek().type === TokenType.EOF;
   }
 
+  /**
+   * moves focus to the next token
+   * @returns returns the previous token
+   */
   private advance() {
     if (!this.isAtEnd()) this.current++;
     return this.previous();
   }
 
+  /**
+   * if one of your tokens is matches the current token it moves focus to the next token and returns true
+   * else returns false
+   * @param types an array of token types
+   * @returns
+   */
   private match(...types: TokenType[]) {
     for (const type of types) {
       if (this.check(type)) {
@@ -258,4 +327,5 @@ class Parser {
     }
   }
 }
+
 export default Parser;
