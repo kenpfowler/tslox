@@ -6,7 +6,7 @@ describe('Interpreter Class', () => {
       jest.resetAllMocks();
     });
 
-    test('correctly prints nil value', () => {
+    test('prints nil value', () => {
       matchPrintOutput('nil', 'literal.lox', ['nil']);
     });
   });

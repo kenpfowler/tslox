@@ -8,7 +8,7 @@ describe('Interpreter Class', () => {
       jest.resetAllMocks();
     });
 
-    test('correctly prints strings', () => {
+    test('prints nil for uninitialized variable', () => {
       matchPrintOutput(folder, 'uninitialized.lox', ['nil']);
     });
   });

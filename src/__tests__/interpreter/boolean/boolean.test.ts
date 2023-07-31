@@ -8,7 +8,7 @@ describe('Interpreter Class', () => {
       jest.resetAllMocks();
     });
 
-    test('evaluates equalities correctly', () => {
+    test('evaluates equalities', () => {
       matchPrintOutput(folder, 'equality.lox', [
         'true',
         'false',
@@ -31,7 +31,7 @@ describe('Interpreter Class', () => {
       ]);
     });
 
-    test('evaluates the not operator correctly', () => {
+    test('evaluates the not operator', () => {
       matchPrintOutput(folder, 'not.lox', ['false', 'true', 'true']);
     });
   });

@@ -7,11 +7,11 @@ describe('Interpreter Class', () => {
       jest.resetAllMocks();
     });
 
-    test('adds numbers and strings correctly', () => {
+    test('adds numbers and strings', () => {
       matchPrintOutput(folder, 'add.lox', ['579', 'string']);
     });
 
-    test('evaluates comparisons correctly', () => {
+    test('evaluates comparisons', () => {
       matchPrintOutput(folder, 'comparison.lox', [
         'true',
         'false',
@@ -36,11 +36,11 @@ describe('Interpreter Class', () => {
       ]);
     });
 
-    test('divides numbers correctly', () => {
+    test('divides numbers', () => {
       matchPrintOutput(folder, 'divide.lox', ['4', '1']);
     });
 
-    test('evaluates equality correctly', () => {
+    test('evaluates equality', () => {
       matchPrintOutput(folder, 'equals.lox', [
         'true',
         'true',
@@ -55,15 +55,15 @@ describe('Interpreter Class', () => {
       ]);
     });
 
-    test('multiplies numbers correctly', () => {
+    test('multiplies numbers', () => {
       matchPrintOutput(folder, 'multiply.lox', ['15', '3.702']);
     });
 
-    test('multiplies numbers correctly', () => {
+    test('negates numbers', () => {
       matchPrintOutput(folder, 'negate.lox', ['-3', '3', '-3']);
     });
 
-    test('evaluates not equal correctly', () => {
+    test('evaluates not equal', () => {
       matchPrintOutput(folder, 'not_equal.lox', [
         'false',
         'false',
@@ -78,7 +78,7 @@ describe('Interpreter Class', () => {
       ]);
     });
 
-    test('subtracts numbers correctly', () => {
+    test('subtracts numbers', () => {
       matchPrintOutput(folder, 'subtract.lox', ['1', '0']);
     });
   });

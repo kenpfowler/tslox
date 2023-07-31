@@ -8,11 +8,11 @@ describe('Interpreter Class', () => {
       jest.resetAllMocks();
     });
 
-    test('correctly prints strings', () => {
+    test('prints strings', () => {
       matchPrintOutput(folder, 'literal.lox', ['()', 'a string', 'A~¶Þॐஃ']);
     });
 
-    test('correctly prints multiline strings', () => {
+    test('prints multiline strings', () => {
       matchPrintOutput(folder, 'multiline.lox', ['1\n2\n3']);
     });
   });
