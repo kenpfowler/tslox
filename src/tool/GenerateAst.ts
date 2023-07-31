@@ -65,6 +65,7 @@ class GenerateAst {
 
   private static defineTypes(baseName: string, types: Map<string, string>) {
     types.forEach((value, key) => {
+      this.output += `/**\n* represents a ${key}${baseName}\n */\n`;
       this.output += `export class ${key} extends ${baseName} {` + '\n';
       this.defineProperties(value);
       this.output += `constructor (${value}) {` + '\n' + 'super();' + '\n';
@@ -87,6 +88,7 @@ class GenerateAst {
     'Expr',
     path.resolve(process.cwd()),
     new Map([
+      ['Assign', 'name: Token, value: Expr'],
       ['Binary', 'left: Expr, operator: Token, right: Expr'],
       ['Grouping', 'expr: Expr'],
       ['Literal', 'value: LoxLiteral'],
