@@ -1,5 +1,8 @@
 import Token from './Token';
 
+/**
+ * Defines a runtime error in the program.
+ */
 class RuntimeError extends Error {
   readonly token: Token;
 

@@ -2,8 +2,10 @@ import Lox from './Lox';
 import Token, { LoxLiteral } from './Token';
 import TokenType from './TokenType';
 
+/**
+ * Attempts to process a source file into tokens
+ */
 class Scanner {
-  // a scanner will take in a file and process it into tokens...
   private tokens: Array<Token> = [];
   private source: string;
   private start = 0;

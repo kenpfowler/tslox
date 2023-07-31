@@ -5,11 +5,6 @@ import { ExpressionStatement, Print, Stmt, Var } from './Stmt';
 import Token from './Token';
 import TokenType from './TokenType';
 
-// TODO: implement parser.  See CH6: https://craftinginterpreters.com/parsing-expressions.html
-// in order to understand how to code the parser you need to understand how lox's grammar works.
-// the above chapter and a few preceding chapters help you understand this.
-// it works much like the scanner in that it takes a list of tokens and then tries to match those to a valid expression in the language
-
 /**
  * program        → declaration* EOF
  * declaration    → classDecl | funDecl | varDecl | statement
@@ -43,6 +38,9 @@ import TokenType from './TokenType';
  * primary        → NUMBER | STRING | "true" | "false" | "nil" | "this" | IDENTIFIER | "(" expression ")" | "super" "." IDENTIFIER
  */
 
+/**
+ * Attempts to assemble a list of valid statements and expressions given a list of tokens
+ */
 class Parser {
   private readonly tokens: Array<Token>;
   private current = 0;

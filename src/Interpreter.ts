@@ -6,6 +6,9 @@ import { ExpressionStatement, Print, Stmt, StmtVisitor, Var } from './Stmt';
 import Token, { LoxLiteral } from './Token';
 import TokenType from './TokenType';
 
+/**
+ * Attempts to interpret a list of statements and produce the outputs/side effects
+ */
 class Interpreter implements ExprVisitor<LoxLiteral>, StmtVisitor<void> {
   private environment = new Environment();
 
