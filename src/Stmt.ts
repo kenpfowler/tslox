@@ -11,6 +11,9 @@ export interface StmtVisitor<R> {
   visitVarStmt: (stmt: Var) => R;
 }
 
+/**
+ * represents a ExpressionStatementStmt
+ */
 export class ExpressionStatement extends Stmt {
   readonly expr: Expr;
 
@@ -22,6 +25,9 @@ export class ExpressionStatement extends Stmt {
     return visitor.visitExpressionStatementStmt(this);
   }
 }
+/**
+ * represents a PrintStmt
+ */
 export class Print extends Stmt {
   readonly expression: Expr;
 
@@ -33,6 +39,9 @@ export class Print extends Stmt {
     return visitor.visitPrintStmt(this);
   }
 }
+/**
+ * represents a VarStmt
+ */
 export class Var extends Stmt {
   readonly name: Token;
   readonly initializer: Expr;

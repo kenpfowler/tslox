@@ -5,6 +5,7 @@ export abstract class Expr {
 }
 
 export interface ExprVisitor<R> {
+  visitAssignExpr: (expr: Assign) => R;
   visitBinaryExpr: (expr: Binary) => R;
   visitGroupingExpr: (expr: Grouping) => R;
   visitLiteralExpr: (expr: Literal) => R;
@@ -12,6 +13,25 @@ export interface ExprVisitor<R> {
   visitVariableExpr: (expr: Variable) => R;
 }
 
+/**
+ * represents a AssignExpr
+ */
+export class Assign extends Expr {
+  readonly name: Token;
+  readonly value: Expr;
+
+  constructor(name: Token, value: Expr) {
+    super();
+    this.name = name;
+    this.value = value;
+  }
+  public accept<R>(visitor: ExprVisitor<R>): R {
+    return visitor.visitAssignExpr(this);
+  }
+}
+/**
+ * represents a BinaryExpr
+ */
 export class Binary extends Expr {
   readonly left: Expr;
   readonly operator: Token;
@@ -27,6 +47,9 @@ export class Binary extends Expr {
     return visitor.visitBinaryExpr(this);
   }
 }
+/**
+ * represents a GroupingExpr
+ */
 export class Grouping extends Expr {
   readonly expr: Expr;
 
@@ -38,6 +61,9 @@ export class Grouping extends Expr {
     return visitor.visitGroupingExpr(this);
   }
 }
+/**
+ * represents a LiteralExpr
+ */
 export class Literal extends Expr {
   readonly value: LoxLiteral;
 
@@ -49,6 +75,9 @@ export class Literal extends Expr {
     return visitor.visitLiteralExpr(this);
   }
 }
+/**
+ * represents a UnaryExpr
+ */
 export class Unary extends Expr {
   readonly operator: Token;
   readonly right: Expr;
@@ -62,6 +91,9 @@ export class Unary extends Expr {
     return visitor.visitUnaryExpr(this);
   }
 }
+/**
+ * represents a VariableExpr
+ */
 export class Variable extends Expr {
   readonly name: Token;
 
