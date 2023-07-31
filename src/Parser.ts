@@ -10,6 +10,39 @@ import TokenType from './TokenType';
 // the above chapter and a few preceding chapters help you understand this.
 // it works much like the scanner in that it takes a list of tokens and then tries to match those to a valid expression in the language
 
+/**
+ * program        → declaration* EOF
+ * declaration    → classDecl | funDecl | varDecl | statement
+ * classDecl      → "class" IDENTIFIER ( "<" IDENTIFIER )? "{" function* "}"
+ * funDecl        → "fun" function
+ * function       → IDENTIFIER "(" parameters? ")" block
+ * parameters     → IDENTIFIER ( "," IDENTIFIER )*
+ * varDecl        → "var" IDENTIFIER ( "=" expression )? ";"
+ * statement      → exprStmt | forStmt | ifStmt | printStmt | returnStmt | whileStmt | block
+ * exprStmt       → expression ";"
+ * ifStmt         → "if" "(" expression ")" statement ( "else" statement )?
+ * forStmt        → "for" "(" ( varDecl | exprStmt | ";" ) expression? ";" expression? ")" statement
+ * printStmt      → "print" expression ";"
+ * returnStmt     → "return" expression? ";"
+ * whileStmt      → "while" "(" expression ")" statement
+ * block          → "{" declaration* "}" ;
+ *
+ *
+ *
+ * expression     → assignment
+ * assignment     → ( call "." )? IDENTIFIER "=" assignment | logicOr
+ * logicOr        → logicAnd ("or" logicAnd)*
+ * logicAnd       → equality ("and" equality)*
+ * equality       → comparison ( ( "!=" | "==" ) comparison )*
+ * comparison     → term ( ( ">" | ">=" | "<" | "<=" ) term )*
+ * term           → factor ( ( "-" | "+" ) factor )*
+ * factor         → unary ( ( "/" | "*" ) unary )*
+ * unary          → ( "!" | "-" ) unary | call
+ * call           → primary ( "(" arguments? ")" | "." IDENTIFIER )*
+ * arguments      → expression ( "," expression )*
+ * primary        → NUMBER | STRING | "true" | "false" | "nil" | "this" | IDENTIFIER | "(" expression ")" | "super" "." IDENTIFIER
+ */
+
 class Parser {
   private readonly tokens: Array<Token>;
   private current = 0;
