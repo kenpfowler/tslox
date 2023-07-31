@@ -1,37 +1,44 @@
-import { Binary, Expression, Grouping, Literal, Unary, Visitor } from './Expression';
+import { Binary, Expr, Grouping, Literal, Unary, ExprVisitor, Variable } from './Expr';
 
 // pass any expression to the AstPrinter => return a print representation of that tree with brackets denoting the nesting.
 // ex:
-export class AstPrinter implements Visitor<string> {
-  expression: Expression;
+export class AstPrinter implements ExprVisitor<string> {
+  expr: Expr;
 
-  constructor(expression: Expression) {
-    this.expression = expression;
+  constructor(expr: Expr) {
+    this.expr = expr;
+  }
+  // visitExpressionStatement: (statement: Expression) => void;
+  // visitPrintStatement: (statement: Print) => void;
+  // visitVarStatement: (statement: Var) => void;
+
+  visitVariableExpr(expr: Variable) {
+    return this.parenthesize('var', expr);
   }
 
-  visitBinaryExpression(expression: Binary) {
-    return this.parenthesize(expression.operator.lexeme ?? '', expression.left, expression.right);
+  visitBinaryExpr(expr: Binary) {
+    return this.parenthesize(expr.operator.lexeme, expr.left, expr.right);
   }
 
-  visitGroupingExpression(expression: Grouping) {
-    return this.parenthesize('group', expression.expression);
+  visitGroupingExpr(expr: Grouping) {
+    return this.parenthesize('group', expr.expr);
   }
 
-  visitLiteralExpression(expression: Literal) {
-    if (expression.value === null) return 'nil';
-    return expression.value?.toString() ?? '';
+  visitLiteralExpr(expr: Literal) {
+    if (expr.value === null) return 'nil';
+    return expr.value?.toString() ?? '';
   }
 
-  visitUnaryExpression(expression: Unary) {
-    return this.parenthesize(expression.operator.lexeme ?? '', expression.right);
+  visitUnaryExpr(expr: Unary) {
+    return this.parenthesize(expr.operator.lexeme, expr.right);
   }
 
-  parenthesize(name: string, ...expressions: Expression[]) {
+  parenthesize(name: string, ...exprs: Expr[]) {
     const parenthesized = ['(', name];
 
-    for (const expression of expressions) {
+    for (const expr of exprs) {
       parenthesized.push(' ');
-      parenthesized.push(expression.accept(this));
+      parenthesized.push(expr.accept(this));
     }
 
     parenthesized.push(')');
@@ -39,6 +46,6 @@ export class AstPrinter implements Visitor<string> {
   }
 
   print() {
-    return this.expression.accept(this);
+    return this.expr.accept(this);
   }
 }
