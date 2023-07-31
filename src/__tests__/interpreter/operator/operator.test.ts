@@ -39,5 +39,47 @@ describe('Interpreter Class', () => {
     test('divides numbers correctly', () => {
       matchPrintOutput(folder, 'divide.lox', ['4', '1']);
     });
+
+    test('evaluates equality correctly', () => {
+      matchPrintOutput(folder, 'equals.lox', [
+        'true',
+        'true',
+        'false',
+        'true',
+        'false',
+        'true',
+        'false',
+        'false',
+        'false',
+        'false',
+      ]);
+    });
+
+    test('multiplies numbers correctly', () => {
+      matchPrintOutput(folder, 'multiply.lox', ['15', '3.702']);
+    });
+
+    test('multiplies numbers correctly', () => {
+      matchPrintOutput(folder, 'negate.lox', ['-3', '3', '-3']);
+    });
+
+    test('evaluates not equal correctly', () => {
+      matchPrintOutput(folder, 'not_equal.lox', [
+        'false',
+        'false',
+        'true',
+        'false',
+        'true',
+        'false',
+        'true',
+        'true',
+        'true',
+        'true',
+      ]);
+    });
+
+    test('subtracts numbers correctly', () => {
+      matchPrintOutput(folder, 'subtract.lox', ['1', '0']);
+    });
   });
 });
