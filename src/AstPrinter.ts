@@ -1,4 +1,4 @@
-import { Binary, Expr, Grouping, Literal, Unary, ExprVisitor, Variable } from './Expr';
+import { Binary, Expr, Grouping, Literal, Unary, ExprVisitor, Variable, Assign } from './Expr';
 
 // pass any expression to the AstPrinter => return a print representation of that tree with brackets denoting the nesting.
 // ex:
@@ -31,6 +31,10 @@ export class AstPrinter implements ExprVisitor<string> {
 
   visitUnaryExpr(expr: Unary) {
     return this.parenthesize(expr.operator.lexeme, expr.right);
+  }
+
+  visitAssignExpr(expr: Assign) {
+    return this.parenthesize(expr.name.lexeme, expr);
   }
 
   parenthesize(name: string, ...exprs: Expr[]) {

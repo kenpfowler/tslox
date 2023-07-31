@@ -1,5 +1,5 @@
 import Environment from './Environment';
-import { ExprVisitor, Binary, Expr, Unary, Grouping, Literal, Variable } from './Expr';
+import { ExprVisitor, Binary, Expr, Unary, Grouping, Literal, Variable, Assign } from './Expr';
 import Lox from './Lox';
 import RuntimeError from './RuntimeError';
 import { ExpressionStatement, Print, Stmt, StmtVisitor, Var } from './Stmt';
@@ -36,6 +36,11 @@ class Interpreter implements ExprVisitor<LoxLiteral>, StmtVisitor<void> {
     return object.toString();
   }
 
+  /**
+   * the interpreter calls the appropriate visit method for the expression passed
+   * @param expression
+   * @returns
+   */
   private evaluate(expression: Expr): LoxLiteral {
     return expression.accept(this);
   }
@@ -141,16 +146,26 @@ class Interpreter implements ExprVisitor<LoxLiteral>, StmtVisitor<void> {
     return null;
   }
 
+  /**
+   * evaluates the expression within the ExpressionStatement.
+   * @param statement
+   * @returns null
+   */
   visitExpressionStatementStmt(statement: ExpressionStatement) {
     this.evaluate(statement.expr);
     return null;
   }
 
-  public visitVariableExpr(expression: Variable) {
+  /**
+   * gets the value referenced by the variable from the runtime environment
+   * @param expression
+   * @returns a literal value
+   */
+  visitVariableExpr(expression: Variable) {
     return this.environment.get(expression.name);
   }
 
-  public visitVarStmt(statement: Var) {
+  visitVarStmt(statement: Var) {
     let value: LoxLiteral = null;
     if (statement.initializer != null) {
       value = this.evaluate(statement.initializer);
@@ -158,6 +173,12 @@ class Interpreter implements ExprVisitor<LoxLiteral>, StmtVisitor<void> {
 
     this.environment.define(statement.name, value);
     return null;
+  }
+
+  visitAssignExpr(expr: Assign): LoxLiteral {
+    const value = this.evaluate(expr.value);
+    this.environment.assign(expr.name, value);
+    return value;
   }
 }
 export default Interpreter;
