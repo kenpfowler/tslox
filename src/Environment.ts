@@ -14,11 +14,12 @@ class Environment {
    */
   public get(name: Token) {
     const variable = this.values.get(name.lexeme);
-    if (variable) {
-      return variable;
+
+    if (variable === undefined) {
+      throw new RuntimeError(name, "Undefined variable '" + name.lexeme + "'.");
     }
 
-    throw new RuntimeError(name, "Undefined variable '" + name.lexeme + "'.");
+    return variable;
   }
 
   /**
