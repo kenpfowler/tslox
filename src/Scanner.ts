@@ -1,5 +1,5 @@
 import Lox from './Lox';
-import Token, { ITokenType } from './Token';
+import Token, { LoxLiteral } from './Token';
 import TokenType from './TokenType';
 
 class Scanner {
@@ -37,8 +37,8 @@ class Scanner {
     return this.current >= this.source.length;
   }
 
-  private addToken(props: ITokenType) {
-    const token = new Token(props);
+  private addToken(type: TokenType, lexeme: string, line: number, literal?: LoxLiteral) {
+    const token = new Token({ type, lexeme, line, literal: literal ?? null });
     this.tokens.push(token);
   }
 
@@ -49,7 +49,9 @@ class Scanner {
       this.scanToken();
     }
 
-    this.tokens.push(new Token({ type: TokenType.EOF, line: this.line }));
+    this.tokens.push(
+      new Token({ type: TokenType.EOF, line: this.line, lexeme: 'EOF', literal: null })
+    );
     return this.tokens;
   }
 
@@ -85,12 +87,7 @@ class Scanner {
     this.advance();
 
     const string = this.source.substring(this.start + 1, this.current - 1);
-    this.addToken({
-      type: TokenType.STRING,
-      lexeme: string,
-      line: this.line,
-      literal: String(string),
-    });
+    this.addToken(TokenType.STRING, string, this.line, String(string));
   }
 
   private isDigit(char: string) {
@@ -110,12 +107,7 @@ class Scanner {
       while (this.isDigit(this.peek())) this.advance();
     }
 
-    this.addToken({
-      type: TokenType.NUMBER,
-      lexeme: this.getLexeme(),
-      literal: Number(this.getLexeme()),
-      line: this.line,
-    });
+    this.addToken(TokenType.NUMBER, this.getLexeme(), this.line, Number(this.getLexeme()));
   }
 
   private identifier() {
@@ -129,11 +121,7 @@ class Scanner {
     let type = this.keywords.get(text);
     if (!type) type = TokenType.IDENTIFIER;
 
-    this.addToken({
-      type,
-      line: this.line,
-      lexeme: this.getLexeme(),
-    });
+    this.addToken(type, this.getLexeme(), this.line);
   }
 
   private isAlpha(char: string) {
@@ -184,66 +172,62 @@ class Scanner {
 
     switch (char) {
       case TokenType.LEFT_PAREN:
-        this.addToken({
-          type: TokenType.LEFT_PAREN,
-          line: this.line,
-          lexeme: this.getLexeme(),
-        });
+        this.addToken(TokenType.LEFT_PAREN, this.getLexeme(), this.line);
         break;
       case TokenType.RIGHT_PAREN:
-        this.addToken({ type: TokenType.RIGHT_PAREN, line: this.line, lexeme: this.getLexeme() });
+        this.addToken(TokenType.RIGHT_PAREN, this.getLexeme(), this.line);
         break;
       case TokenType.LEFT_BRACE:
-        this.addToken({ type: TokenType.LEFT_BRACE, line: this.line, lexeme: this.getLexeme() });
+        this.addToken(TokenType.LEFT_BRACE, this.getLexeme(), this.line);
         break;
       case TokenType.RIGHT_BRACE:
-        this.addToken({ type: TokenType.RIGHT_BRACE, line: this.line, lexeme: this.getLexeme() });
+        this.addToken(TokenType.RIGHT_BRACE, this.getLexeme(), this.line);
         break;
       case TokenType.COMMA:
-        this.addToken({ type: TokenType.COMMA, line: this.line, lexeme: this.getLexeme() });
+        this.addToken(TokenType.COMMA, this.getLexeme(), this.line);
         break;
       case TokenType.DOT:
-        this.addToken({ type: TokenType.DOT, line: this.line, lexeme: this.getLexeme() });
+        this.addToken(TokenType.DOT, this.getLexeme(), this.line);
         break;
       case TokenType.MINUS:
-        this.addToken({ type: TokenType.MINUS, line: this.line, lexeme: this.getLexeme() });
+        this.addToken(TokenType.MINUS, this.getLexeme(), this.line);
         break;
       case TokenType.PLUS:
-        this.addToken({ type: TokenType.PLUS, line: this.line, lexeme: this.getLexeme() });
+        this.addToken(TokenType.PLUS, this.getLexeme(), this.line);
         break;
       case TokenType.SEMICOLON:
-        this.addToken({ type: TokenType.SEMICOLON, line: this.line, lexeme: this.getLexeme() });
+        this.addToken(TokenType.SEMICOLON, this.getLexeme(), this.line);
         break;
       case TokenType.STAR:
-        this.addToken({ type: TokenType.STAR, line: this.line, lexeme: this.getLexeme() });
+        this.addToken(TokenType.STAR, this.getLexeme(), this.line);
         break;
       case TokenType.BANG:
-        this.addToken({
-          type: this.match('=') ? TokenType.BANG_EQUAL : TokenType.BANG,
-          line: this.line,
-          lexeme: this.getLexeme(),
-        });
+        this.addToken(
+          this.match('=') ? TokenType.BANG_EQUAL : TokenType.BANG,
+          this.getLexeme(),
+          this.line
+        );
         break;
       case TokenType.EQUAL:
-        this.addToken({
-          type: this.match('=') ? TokenType.EQUAL_EQUAL : TokenType.EQUAL,
-          line: this.line,
-          lexeme: this.getLexeme(),
-        });
+        this.addToken(
+          this.match('=') ? TokenType.EQUAL_EQUAL : TokenType.EQUAL,
+          this.getLexeme(),
+          this.line
+        );
         break;
       case TokenType.GREATER:
-        this.addToken({
-          type: this.match('=') ? TokenType.GREATER_EQUAL : TokenType.GREATER,
-          line: this.line,
-          lexeme: this.getLexeme(),
-        });
+        this.addToken(
+          this.match('=') ? TokenType.GREATER_EQUAL : TokenType.GREATER,
+          this.getLexeme(),
+          this.line
+        );
         break;
       case TokenType.LESS:
-        this.addToken({
-          type: this.match('=') ? TokenType.LESS_EQUAL : TokenType.LESS,
-          line: this.line,
-          lexeme: this.getLexeme(),
-        });
+        this.addToken(
+          this.match('=') ? TokenType.LESS_EQUAL : TokenType.LESS,
+          this.getLexeme(),
+          this.line
+        );
         break;
       case TokenType.SLASH:
         if (this.match('/')) {
@@ -251,7 +235,7 @@ class Scanner {
         } else if (this.match('*')) {
           this.commentBlock();
         } else {
-          this.addToken({ type: TokenType.SLASH, line: this.line, lexeme: this.getLexeme() });
+          this.addToken(TokenType.SLASH, this.getLexeme(), this.line);
         }
         break;
       case ' ':
