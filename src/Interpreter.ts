@@ -1,12 +1,15 @@
-import { Visitor, Expression, Binary, Unary, Grouping, Literal } from './Expression';
+import Environment from './Environment';
+import { ExprVisitor, Binary, Expr, Unary, Grouping, Literal, Variable } from './Expr';
 import Lox from './Lox';
 import RuntimeError from './RuntimeError';
-import { ExpressionStatement, PrintStatement, Statement, Visitor } from './Statement';
+import { ExpressionStatement, Print, Stmt, StmtVisitor, Var } from './Stmt';
 import Token, { LoxLiteral } from './Token';
 import TokenType from './TokenType';
 
-class Interpreter implements Visitor<LoxLiteral>, Visitor<void> {
-  public interpret(statements: Array<Statement>) {
+class Interpreter implements ExprVisitor<LoxLiteral>, StmtVisitor<void> {
+  private environment = new Environment();
+
+  public interpret(statements: Array<Stmt>) {
     try {
       for (const statement of statements) {
         this.execute(statement);
@@ -17,10 +20,6 @@ class Interpreter implements Visitor<LoxLiteral>, Visitor<void> {
   }
 
   private stringify(object: LoxLiteral) {
-    if (object === undefined) {
-      throw Error('cant be undefined');
-    }
-
     if (object === null) return 'nil';
 
     if (typeof object === 'number') {
@@ -34,12 +33,11 @@ class Interpreter implements Visitor<LoxLiteral>, Visitor<void> {
     return object.toString();
   }
 
-  // not sure how to type this
-  private evaluate(expression: Expression): LoxLiteral {
+  private evaluate(expression: Expr): LoxLiteral {
     return expression.accept(this);
   }
 
-  private execute(statement: Statement) {
+  private execute(statement: Stmt) {
     statement.accept(this);
   }
 
@@ -48,13 +46,14 @@ class Interpreter implements Visitor<LoxLiteral>, Visitor<void> {
     if (typeof arg === 'boolean') return arg;
     return true;
   }
+
   private isEqual(a: LoxLiteral, b: LoxLiteral) {
     // FIXME: since objects are passed by reference this function will not be able to evaluate if they are equal.  This may become a problem.
     // testing strict equality should work for strings, numbers, booleans, null, undefined
     return a === b;
   }
 
-  visitBinaryExpression(expression: Binary) {
+  visitBinaryExpr(expression: Binary) {
     const left = this.evaluate(expression.left);
     const right = this.evaluate(expression.right);
 
@@ -110,37 +109,51 @@ class Interpreter implements Visitor<LoxLiteral>, Visitor<void> {
     throw new RuntimeError(operator, 'Operands must be numbers.');
   }
 
-  visitUnaryExpression(expression: Unary) {
+  visitUnaryExpr(expression: Unary) {
     const right = this.evaluate(expression.right);
 
     switch (expression.operator.type) {
+      case TokenType.BANG:
+        return !this.isTruthy(right);
       case TokenType.MINUS:
         this.checkNumberOperand(expression.operator, right);
         return -Number(right);
-      case TokenType.BANG:
-        return !this.isTruthy(right);
     }
 
     // Unreachable.
     return null;
   }
 
-  visitGroupingExpression(expression: Grouping) {
-    return this.evaluate(expression.expression);
+  visitGroupingExpr(expression: Grouping) {
+    return this.evaluate(expression.expr);
   }
 
-  visitLiteralExpression(expression: Literal) {
+  visitLiteralExpr(expression: Literal) {
     return expression.value;
   }
 
-  visitPrintStatement(statement: PrintStatement) {
+  visitPrintStmt(statement: Print) {
     const expression = this.evaluate(statement.expression);
     console.log(this.stringify(expression));
     return null;
   }
 
-  visitExpressionStatement(statement: ExpressionStatement) {
-    this.evaluate(statement.expression);
+  visitExpressionStatementStmt(statement: ExpressionStatement) {
+    this.evaluate(statement.expr);
+    return null;
+  }
+
+  public visitVariableExpr(expression: Variable) {
+    return this.environment.get(expression.name);
+  }
+
+  public visitVarStmt(statement: Var) {
+    let value: LoxLiteral = null;
+    if (statement.initializer != null) {
+      value = this.evaluate(statement.initializer);
+    }
+
+    this.environment.define(statement.name, value);
     return null;
   }
 }
