@@ -101,6 +101,7 @@ class GenerateAst {
     'Stmt',
     path.resolve(process.cwd()),
     new Map([
+      ['Block', 'statements: Array<Stmt>'],
       ['ExpressionStatement', 'expr: Expr'],
       ['Print', 'expression: Expr'],
       ['Var', 'name: Token, initializer: Expr'],

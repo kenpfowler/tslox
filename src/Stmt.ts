@@ -6,11 +6,26 @@ export abstract class Stmt {
 }
 
 export interface StmtVisitor<R> {
+  visitBlockStmt: (stmt: Block) => R;
   visitExpressionStatementStmt: (stmt: ExpressionStatement) => R;
   visitPrintStmt: (stmt: Print) => R;
   visitVarStmt: (stmt: Var) => R;
 }
 
+/**
+ * represents a BlockStmt
+ */
+export class Block extends Stmt {
+  readonly statements: Array<Stmt>;
+
+  constructor(statements: Array<Stmt>) {
+    super();
+    this.statements = statements;
+  }
+  public accept<R>(visitor: StmtVisitor<R>): R {
+    return visitor.visitBlockStmt(this);
+  }
+}
 /**
  * represents a ExpressionStatementStmt
  */

@@ -11,11 +11,6 @@ class Lox {
   private static hadError = false;
   private static hadRuntimeError = false;
 
-  static runtimeError(error: RuntimeError) {
-    console.error(error.message + '\n[line ' + error.token.line + ']');
-    this.hadRuntimeError = true;
-  }
-
   public static runPrompt() {
     const rl = readline.createInterface({
       input: process.stdin,
@@ -40,11 +35,6 @@ class Lox {
     this.interpreter.interpret(statements);
   }
 
-  public static reportError(line: number, message: string) {
-    const msg = `[line ${line}] ${message}`;
-    throw Error(msg);
-  }
-
   public static error(token: Token, message: string) {
     if (token.type === TokenType.EOF) {
       this.report(token.line, ' at end', message);
@@ -52,6 +42,12 @@ class Lox {
       this.report(token.line, " at '" + token.lexeme + "'", message);
     }
   }
+
+  static runtimeError(error: RuntimeError) {
+    console.error(error.message + '\n[line ' + error.token.line + ']');
+    this.hadRuntimeError = true;
+  }
+
   private static report(line: number, where: string, message: string) {
     console.error('[line ' + line + '] Error' + where + ': ' + message);
     this.hadError = true;

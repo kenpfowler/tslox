@@ -2,7 +2,7 @@ import Environment from './Environment';
 import { ExprVisitor, Binary, Expr, Unary, Grouping, Literal, Variable, Assign } from './Expr';
 import Lox from './Lox';
 import RuntimeError from './RuntimeError';
-import { ExpressionStatement, Print, Stmt, StmtVisitor, Var } from './Stmt';
+import { Block, ExpressionStatement, Print, Stmt, StmtVisitor, Var } from './Stmt';
 import Token, { LoxLiteral } from './Token';
 import TokenType from './TokenType';
 
@@ -179,6 +179,24 @@ class Interpreter implements ExprVisitor<LoxLiteral>, StmtVisitor<void> {
     const value = this.evaluate(expr.value);
     this.environment.assign(expr.name, value);
     return value;
+  }
+
+  private executeBlock(statements: Array<Stmt>, environment: Environment) {
+    const previous = this.environment;
+    try {
+      this.environment = environment;
+      for (const statement of statements) {
+        this.execute(statement);
+      }
+    } finally {
+      this.environment = previous;
+    }
+  }
+
+  visitBlockStmt(stmt: Block) {
+    this.executeBlock(stmt.statements, new Environment(this.environment));
+
+    return null;
   }
 }
 export default Interpreter;

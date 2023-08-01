@@ -2,7 +2,7 @@ import exp from 'constants';
 import { Assign, Binary, Expr, Grouping, Literal, Unary, Variable } from './Expr';
 import Lox from './Lox';
 import ParseError from './ParseError';
-import { ExpressionStatement, Print, Stmt, Var } from './Stmt';
+import { Block, ExpressionStatement, Print, Stmt, Var } from './Stmt';
 import Token from './Token';
 import TokenType from './TokenType';
 
@@ -103,7 +103,18 @@ class Parser {
 
   private statement() {
     if (this.match(TokenType.PRINT)) return this.printStatement();
+    if (this.match(TokenType.LEFT_BRACE)) return new Block(this.block());
     return this.expressionStatement();
+  }
+
+  private block() {
+    const statements = new Array<Stmt>();
+    while (!this.check(TokenType.RIGHT_BRACE) && !this.isAtEnd()) {
+      statements.push(this.declaration());
+    }
+
+    this.consume(TokenType.RIGHT_BRACE, "Expect '}' after block.");
+    return statements;
   }
 
   private printStatement() {
