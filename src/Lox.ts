@@ -43,6 +43,11 @@ class Lox {
     }
   }
 
+  public static reportError(line: number, message: string) {
+    const msg = `[line ${line}] ${message}`;
+    throw Error(msg);
+  }
+
   static runtimeError(error: RuntimeError) {
     console.error(error.message + '\n[line ' + error.token.line + ']');
     this.hadRuntimeError = true;

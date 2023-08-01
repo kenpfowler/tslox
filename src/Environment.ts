@@ -18,7 +18,7 @@ class Environment {
    * @returns returns the value mapped to the variable name else returns a runtime error if the variable does not exist
    */
   public get(name: Token): LoxLiteral {
-    let variable = this.values.get(name.lexeme);
+    const variable = this.values.get(name.lexeme);
 
     if (variable !== undefined) {
       return variable;

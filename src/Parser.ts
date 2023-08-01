@@ -1,4 +1,3 @@
-import exp from 'constants';
 import { Assign, Binary, Expr, Grouping, Literal, Unary, Variable } from './Expr';
 import Lox from './Lox';
 import ParseError from './ParseError';
