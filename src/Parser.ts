@@ -1,7 +1,7 @@
 import { Assign, Binary, Expr, Grouping, Literal, Unary, Variable } from './Expr';
 import Lox from './Lox';
 import ParseError from './ParseError';
-import { Block, ExpressionStatement, Print, Stmt, Var } from './Stmt';
+import { Block, ExpressionStatement, If, Print, Stmt, Var } from './Stmt';
 import Token from './Token';
 import TokenType from './TokenType';
 
@@ -103,7 +103,23 @@ class Parser {
   private statement() {
     if (this.match(TokenType.PRINT)) return this.printStatement();
     if (this.match(TokenType.LEFT_BRACE)) return new Block(this.block());
+    if (this.match(TokenType.IF)) return this.ifStmt();
     return this.expressionStatement();
+  }
+
+  private ifStmt(): If {
+    this.consume(TokenType.LEFT_PAREN, "Expect '(' after if");
+    const condition = this.expression();
+    this.consume(TokenType.RIGHT_PAREN, "Expect ')' after condition");
+
+    const thenBranch = this.statement();
+
+    let elseBranch = null;
+    if (this.match(TokenType.ELSE)) {
+      elseBranch = this.statement();
+    }
+
+    return new If(condition, thenBranch, elseBranch);
   }
 
   private block() {

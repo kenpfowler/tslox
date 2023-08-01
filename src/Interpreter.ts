@@ -2,7 +2,7 @@ import Environment from './Environment';
 import { ExprVisitor, Binary, Expr, Unary, Grouping, Literal, Variable, Assign } from './Expr';
 import Lox from './Lox';
 import RuntimeError from './RuntimeError';
-import { Block, ExpressionStatement, Print, Stmt, StmtVisitor, Var } from './Stmt';
+import { Block, ExpressionStatement, If, Print, Stmt, StmtVisitor, Var } from './Stmt';
 import Token, { LoxLiteral } from './Token';
 import TokenType from './TokenType';
 
@@ -191,6 +191,18 @@ class Interpreter implements ExprVisitor<LoxLiteral>, StmtVisitor<void> {
     } finally {
       this.environment = previous;
     }
+  }
+
+  visitIfStmt(stmt: If) {
+    if (this.isTruthy(this.evaluate(stmt.condition))) {
+      this.execute(stmt.thenBranch);
+    } else {
+      if (stmt.elseBranch) {
+        this.execute(stmt.elseBranch);
+      }
+    }
+
+    return null;
   }
 
   visitBlockStmt(stmt: Block) {

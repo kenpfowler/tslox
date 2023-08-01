@@ -1,17 +1,36 @@
-import { Expr } from './Expr';
-import Token from './Token';
+import { Expr } from "./Expr";
+import Token from "./Token";
 
 export abstract class Stmt {
   abstract accept<R>(visitor: StmtVisitor<R>): R;
 }
 
 export interface StmtVisitor<R> {
+  visitIfStmt: (stmt: If) => R;
   visitBlockStmt: (stmt: Block) => R;
   visitExpressionStatementStmt: (stmt: ExpressionStatement) => R;
   visitPrintStmt: (stmt: Print) => R;
   visitVarStmt: (stmt: Var) => R;
 }
 
+/**
+ * represents a IfStmt
+ */
+export class If extends Stmt {
+  readonly condition: Expr;
+  readonly thenBranch: Stmt;
+  readonly elseBranch: Stmt | null;
+
+  constructor(condition: Expr, thenBranch: Stmt, elseBranch: Stmt | null) {
+    super();
+    this.condition = condition;
+    this.thenBranch = thenBranch;
+    this.elseBranch = elseBranch;
+  }
+  public accept<R>(visitor: StmtVisitor<R>): R {
+    return visitor.visitIfStmt(this);
+  }
+}
 /**
  * represents a BlockStmt
  */
