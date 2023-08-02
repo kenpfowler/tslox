@@ -6,6 +6,7 @@ export abstract class Stmt {
 }
 
 export interface StmtVisitor<R> {
+  visitWhileStmt: (stmt: While) => R;
   visitIfStmt: (stmt: If) => R;
   visitBlockStmt: (stmt: Block) => R;
   visitExpressionStatementStmt: (stmt: ExpressionStatement) => R;
@@ -13,6 +14,22 @@ export interface StmtVisitor<R> {
   visitVarStmt: (stmt: Var) => R;
 }
 
+/**
+ * represents a WhileStmt
+ */
+export class While extends Stmt {
+  readonly condition: Expr;
+  readonly stmt: Stmt;
+
+  constructor(condition: Expr, stmt: Stmt) {
+    super();
+    this.condition = condition;
+    this.stmt = stmt;
+  }
+  public accept<R>(visitor: StmtVisitor<R>): R {
+    return visitor.visitWhileStmt(this);
+  }
+}
 /**
  * represents a IfStmt
  */

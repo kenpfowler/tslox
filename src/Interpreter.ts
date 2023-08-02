@@ -12,7 +12,7 @@ import {
 } from './Expr';
 import Lox from './Lox';
 import RuntimeError from './RuntimeError';
-import { Block, ExpressionStatement, If, Print, Stmt, StmtVisitor, Var } from './Stmt';
+import { Block, ExpressionStatement, If, Print, Stmt, StmtVisitor, Var, While } from './Stmt';
 import Token, { LoxLiteral } from './Token';
 import TokenType from './TokenType';
 
@@ -230,6 +230,13 @@ class Interpreter implements ExprVisitor<LoxLiteral>, StmtVisitor<void> {
   visitBlockStmt(stmt: Block) {
     this.executeBlock(stmt.statements, new Environment(this.environment));
 
+    return null;
+  }
+
+  visitWhileStmt(stmt: While) {
+    while (this.evaluate(stmt.condition)) {
+      this.execute(stmt.stmt);
+    }
     return null;
   }
 }

@@ -1,16 +1,21 @@
-print false and 1; // expect: false
-print true and 1; // expect: 1
-print 1 and 2 and false; // expect: false
+// Single-expression body.
+var c = 0;
+while (c < 3) print c = c + 1;
+// expect: 1
+// expect: 2
+// expect: 3
 
-// Return the last argument if all are true.
-print 1 and true; // expect: true
-print 1 and 2 and 3; // expect: 3
+// Block body.
+var a = 0;
+while (a < 3) {
+  print a;
+  a = a + 1;
+}
+// expect: 0
+// expect: 1
+// expect: 2
 
-// Short-circuit at the first false argument.
-var a = "before";
-var b = "before";
-(a = true) and
-    (b = false) and
-    (a = "bad");
-print a; // expect: true
-print b; // expect: false
+// Statement bodies.
+while (false) if (true) 1; else 2;
+while (false) while (true) 1;
+// while (false) for (;;) 1;

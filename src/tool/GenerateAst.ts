@@ -102,6 +102,7 @@ class GenerateAst {
     'Stmt',
     path.resolve(process.cwd()),
     new Map([
+      ['While', 'condition: Expr, body: Stmt'],
       ['If', 'condition: Expr, thenBranch: Stmt, elseBranch: Stmt | null'],
       ['Block', 'statements: Array<Stmt>'],
       ['ExpressionStatement', 'expr: Expr'],
