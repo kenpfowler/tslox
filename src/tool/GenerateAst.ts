@@ -89,6 +89,7 @@ class GenerateAst {
     path.resolve(process.cwd()),
     new Map([
       ['Assign', 'name: Token, value: Expr'],
+      ['Logical', 'left: Expr, operator: Token, right: Expr'],
       ['Binary', 'left: Expr, operator: Token, right: Expr'],
       ['Grouping', 'expr: Expr'],
       ['Literal', 'value: LoxLiteral'],

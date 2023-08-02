@@ -1,5 +1,15 @@
 import Environment from './Environment';
-import { ExprVisitor, Binary, Expr, Unary, Grouping, Literal, Variable, Assign } from './Expr';
+import {
+  ExprVisitor,
+  Binary,
+  Expr,
+  Unary,
+  Grouping,
+  Literal,
+  Variable,
+  Assign,
+  Logical,
+} from './Expr';
 import Lox from './Lox';
 import RuntimeError from './RuntimeError';
 import { Block, ExpressionStatement, If, Print, Stmt, StmtVisitor, Var } from './Stmt';
@@ -203,6 +213,18 @@ class Interpreter implements ExprVisitor<LoxLiteral>, StmtVisitor<void> {
     }
 
     return null;
+  }
+
+  visitLogicalExpr(expr: Logical) {
+    const left = this.evaluate(expr.left);
+
+    if (expr.operator.type === TokenType.OR) {
+      if (this.isTruthy(left)) return left;
+    } else {
+      if (!this.isTruthy(left)) return left;
+    }
+
+    return this.evaluate(expr.right);
   }
 
   visitBlockStmt(stmt: Block) {

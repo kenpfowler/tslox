@@ -1,4 +1,14 @@
-import { Binary, Expr, Grouping, Literal, Unary, ExprVisitor, Variable, Assign } from './Expr';
+import {
+  Binary,
+  Expr,
+  Grouping,
+  Literal,
+  Unary,
+  ExprVisitor,
+  Variable,
+  Assign,
+  Logical,
+} from './Expr';
 
 // pass any expression to the AstPrinter => return a print representation of that tree with brackets denoting the nesting.
 // ex:
@@ -7,6 +17,9 @@ export class AstPrinter implements ExprVisitor<string> {
 
   constructor(expr: Expr) {
     this.expr = expr;
+  }
+  visitLogicalExpr(expr: Logical) {
+    return '';
   }
   // visitExpressionStatement: (statement: Expression) => void;
   // visitPrintStatement: (statement: Print) => void;

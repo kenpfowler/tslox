@@ -6,6 +6,7 @@ export abstract class Expr {
 
 export interface ExprVisitor<R> {
   visitAssignExpr: (expr: Assign) => R;
+  visitLogicalExpr: (expr: Logical) => R;
   visitBinaryExpr: (expr: Binary) => R;
   visitGroupingExpr: (expr: Grouping) => R;
   visitLiteralExpr: (expr: Literal) => R;
@@ -27,6 +28,24 @@ export class Assign extends Expr {
   }
   public accept<R>(visitor: ExprVisitor<R>): R {
     return visitor.visitAssignExpr(this);
+  }
+}
+/**
+ * represents a LogicalExpr
+ */
+export class Logical extends Expr {
+  readonly left: Expr;
+  readonly operator: Token;
+  readonly right: Expr;
+
+  constructor(left: Expr, operator: Token, right: Expr) {
+    super();
+    this.left = left;
+    this.operator = operator;
+    this.right = right;
+  }
+  public accept<R>(visitor: ExprVisitor<R>): R {
+    return visitor.visitLogicalExpr(this);
   }
 }
 /**
