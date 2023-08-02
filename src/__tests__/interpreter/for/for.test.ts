@@ -1,14 +1,14 @@
 import { matchPrintOutput } from '../../../tool/test.util';
 
 describe('Interpreter Class', () => {
-  describe('for', () => {
+  describe('for loops', () => {
     const folder = 'for';
 
     beforeEach(() => {
       jest.resetAllMocks();
     });
 
-    test('variables can be assigned in the global scope', () => {
+    test('can work with variables from all required scopes', () => {
       matchPrintOutput(folder, 'scope.lox', ['0', '-1', 'after', '0']);
     });
   });

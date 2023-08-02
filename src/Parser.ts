@@ -100,12 +100,58 @@ class Parser {
     return new Var(name, initializer);
   }
 
-  private statement() {
+  private statement(): Stmt {
+    if (this.match(TokenType.FOR)) return this.for();
     if (this.match(TokenType.WHILE)) return this.while();
     if (this.match(TokenType.PRINT)) return this.printStatement();
-    if (this.match(TokenType.LEFT_BRACE)) return new Block(this.block());
     if (this.match(TokenType.IF)) return this.ifStmt();
+    if (this.match(TokenType.LEFT_BRACE)) return new Block(this.block());
     return this.expressionStatement();
+  }
+
+  private for() {
+    this.consume(TokenType.LEFT_PAREN, "Expect '(' after while");
+
+    // the next token is not required
+    let initializer;
+    if (this.match(TokenType.VAR)) {
+      initializer = this.varDeclaration();
+    } else if (this.match(TokenType.SEMICOLON)) {
+      initializer = null;
+    } else {
+      initializer = this.expressionStatement();
+    }
+
+    let condition = null;
+    if (!this.check(TokenType.SEMICOLON)) {
+      condition = this.expression();
+    }
+
+    this.consume(TokenType.SEMICOLON, "Expect ';' after loop condition.");
+
+    let increment = null;
+    if (!this.check(TokenType.RIGHT_PAREN)) {
+      increment = this.expression();
+    }
+
+    this.consume(TokenType.RIGHT_PAREN, "Expect ')' after for clauses.");
+
+    let body = this.statement();
+    if (increment !== null) {
+      body = new Block([body, new ExpressionStatement(increment)]);
+    }
+
+    if (condition === null) {
+      condition = new Literal(true);
+    }
+
+    body = new While(condition, body);
+
+    if (initializer !== null) {
+      body = new Block([initializer, body]);
+    }
+
+    return body;
   }
 
   private while(): While {
