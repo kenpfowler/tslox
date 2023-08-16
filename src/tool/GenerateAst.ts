@@ -91,6 +91,7 @@ class GenerateAst {
       ['Assign', 'name: Token, value: Expr'],
       ['Logical', 'left: Expr, operator: Token, right: Expr'],
       ['Binary', 'left: Expr, operator: Token, right: Expr'],
+      ['Call', 'callee: Expr, paren: Token, args: Array<Expr>'],
       ['Grouping', 'expr: Expr'],
       ['Literal', 'value: LoxLiteral'],
       ['Unary', 'operator: Token, right: Expr'],
@@ -105,7 +106,9 @@ class GenerateAst {
       ['While', 'condition: Expr, body: Stmt'],
       ['If', 'condition: Expr, thenBranch: Stmt, elseBranch: Stmt | null'],
       ['Block', 'statements: Array<Stmt>'],
+      ['Return', 'keyword: Token, value: Expr | null'],
       ['ExpressionStatement', 'expr: Expr'],
+      ['Func', 'name: Token, params: Array<Token>, body: Array<Stmt>'],
       ['Print', 'expression: Expr'],
       ['Var', 'name: Token, initializer: Expr'],
     ])
