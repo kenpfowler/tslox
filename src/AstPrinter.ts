@@ -1,3 +1,4 @@
+import exp from 'constants';
 import {
   Binary,
   Expr,
@@ -8,22 +9,61 @@ import {
   Variable,
   Assign,
   Logical,
+  Call,
 } from './Expr';
+import {
+  Block,
+  ExpressionStatement,
+  Func,
+  If,
+  Print,
+  Return,
+  StmtVisitor,
+  Var,
+  While,
+} from './Stmt';
 
-// pass any expression to the AstPrinter => return a print representation of that tree with brackets denoting the nesting.
-// ex:
-export class AstPrinter implements ExprVisitor<string> {
+export class AstPrinter implements ExprVisitor<string>, StmtVisitor<string> {
   expr: Expr;
 
   constructor(expr: Expr) {
     this.expr = expr;
   }
-  visitLogicalExpr(expr: Logical) {
+  visitReturnStmt(stmt: Return) {
     return '';
   }
-  // visitExpressionStatement: (statement: Expression) => void;
-  // visitPrintStatement: (statement: Print) => void;
-  // visitVarStatement: (statement: Var) => void;
+  visitFuncStmt(stmt: Func) {
+    return '';
+  }
+  visitFunctionStmt(stmt: Function) {
+    return '';
+  }
+  visitWhileStmt(stmt: While) {
+    return '';
+  }
+  visitIfStmt(stmt: If) {
+    return '';
+  }
+  visitBlockStmt(stmt: Block) {
+    return '';
+  }
+  visitExpressionStatementStmt(stmt: ExpressionStatement) {
+    return '';
+  }
+  visitPrintStmt(stmt: Print) {
+    return '';
+  }
+
+  visitVarStmt(stmt: Var) {
+    return '';
+  }
+
+  visitCallExpr(expr: Call) {
+    return this.parenthesize('call', ...expr.args);
+  }
+  visitLogicalExpr(expr: Logical) {
+    return this.parenthesize(expr.operator.lexeme, expr.left, expr.right);
+  }
 
   visitVariableExpr(expr: Variable) {
     return this.parenthesize('var', expr);

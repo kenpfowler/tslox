@@ -62,8 +62,8 @@ class Environment {
    * @param name token containing the name of the variable being defined
    * @param value value being assigned to the variable name
    */
-  public define(name: Token, value: LoxLiteral) {
-    this.values.set(name.lexeme, value);
+  public define(name: string, value: LoxLiteral) {
+    this.values.set(name, value);
   }
 }
 

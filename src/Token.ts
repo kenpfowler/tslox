@@ -1,5 +1,6 @@
+import LoxCallable from './LoxCallable';
 import TokenType from './TokenType';
-export type LoxLiteral = number | string | null | boolean;
+export type LoxLiteral = number | string | null | boolean | LoxCallable;
 
 export interface ITokenType {
   lexeme: string;

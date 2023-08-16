@@ -9,7 +9,9 @@ export interface StmtVisitor<R> {
   visitWhileStmt: (stmt: While) => R;
   visitIfStmt: (stmt: If) => R;
   visitBlockStmt: (stmt: Block) => R;
+  visitReturnStmt: (stmt: Return) => R;
   visitExpressionStatementStmt: (stmt: ExpressionStatement) => R;
+  visitFuncStmt: (stmt: Func) => R;
   visitPrintStmt: (stmt: Print) => R;
   visitVarStmt: (stmt: Var) => R;
 }
@@ -19,12 +21,12 @@ export interface StmtVisitor<R> {
  */
 export class While extends Stmt {
   readonly condition: Expr;
-  readonly stmt: Stmt;
+  readonly body: Stmt;
 
-  constructor(condition: Expr, stmt: Stmt) {
+  constructor(condition: Expr, body: Stmt) {
     super();
     this.condition = condition;
-    this.stmt = stmt;
+    this.body = body;
   }
   public accept<R>(visitor: StmtVisitor<R>): R {
     return visitor.visitWhileStmt(this);
@@ -63,6 +65,22 @@ export class Block extends Stmt {
   }
 }
 /**
+ * represents a ReturnStmt
+ */
+export class Return extends Stmt {
+  readonly keyword: Token;
+  readonly value: Expr | null;
+
+  constructor(keyword: Token, value: Expr | null) {
+    super();
+    this.keyword = keyword;
+    this.value = value;
+  }
+  public accept<R>(visitor: StmtVisitor<R>): R {
+    return visitor.visitReturnStmt(this);
+  }
+}
+/**
  * represents a ExpressionStatementStmt
  */
 export class ExpressionStatement extends Stmt {
@@ -74,6 +92,24 @@ export class ExpressionStatement extends Stmt {
   }
   public accept<R>(visitor: StmtVisitor<R>): R {
     return visitor.visitExpressionStatementStmt(this);
+  }
+}
+/**
+ * represents a FuncStmt
+ */
+export class Func extends Stmt {
+  readonly name: Token;
+  readonly params: Array<Token>;
+  readonly body: Array<Stmt>;
+
+  constructor(name: Token, params: Array<Token>, body: Array<Stmt>) {
+    super();
+    this.name = name;
+    this.params = params;
+    this.body = body;
+  }
+  public accept<R>(visitor: StmtVisitor<R>): R {
+    return visitor.visitFuncStmt(this);
   }
 }
 /**

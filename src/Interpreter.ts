@@ -9,18 +9,52 @@ import {
   Variable,
   Assign,
   Logical,
+  Call,
 } from './Expr';
 import Lox from './Lox';
 import RuntimeError from './RuntimeError';
-import { Block, ExpressionStatement, If, Print, Stmt, StmtVisitor, Var, While } from './Stmt';
+import {
+  Block,
+  ExpressionStatement,
+  Func,
+  If,
+  Print,
+  Return,
+  Stmt,
+  StmtVisitor,
+  Var,
+  While,
+} from './Stmt';
+import ReturnValue from './Return';
 import Token, { LoxLiteral } from './Token';
 import TokenType from './TokenType';
+import LoxFunction from './LoxFunction';
+import LoxCallable from './LoxCallable';
+const isLoxCallable = (callee: any): callee is LoxFunction => {
+  return 'declaration' in callee && 'closure' in callee;
+};
 
 /**
  * Attempts to interpret a list of statements and produce the outputs/side effects
  */
 class Interpreter implements ExprVisitor<LoxLiteral>, StmtVisitor<void> {
-  private environment = new Environment();
+  private readonly globals = new Environment();
+  private environment = this.globals;
+
+  constructor() {
+    this.globals.define('clock', {
+      arity: () => {
+        return 0;
+      },
+      call: (interpreter: Interpreter, args: LoxLiteral[]) => {
+        return Date.now() / 1000;
+      },
+
+      toString: () => {
+        return '<native fn>';
+      },
+    } satisfies LoxCallable);
+  }
 
   public interpret(statements: Array<Stmt>) {
     try {
@@ -181,7 +215,7 @@ class Interpreter implements ExprVisitor<LoxLiteral>, StmtVisitor<void> {
       value = this.evaluate(statement.initializer);
     }
 
-    this.environment.define(statement.name, value);
+    this.environment.define(statement.name.lexeme, value);
     return null;
   }
 
@@ -191,7 +225,7 @@ class Interpreter implements ExprVisitor<LoxLiteral>, StmtVisitor<void> {
     return value;
   }
 
-  private executeBlock(statements: Array<Stmt>, environment: Environment) {
+  public executeBlock(statements: Array<Stmt>, environment: Environment) {
     const previous = this.environment;
     try {
       this.environment = environment;
@@ -235,9 +269,52 @@ class Interpreter implements ExprVisitor<LoxLiteral>, StmtVisitor<void> {
 
   visitWhileStmt(stmt: While) {
     while (this.evaluate(stmt.condition)) {
-      this.execute(stmt.stmt);
+      this.execute(stmt.body);
     }
     return null;
+  }
+
+  visitCallExpr(expr: Call) {
+    // Evaluate the callee to determine if it is
+    const callee = this.evaluate(expr.callee);
+
+    // interpret the arguments and store in an array
+    const args: LoxLiteral[] = [];
+
+    for (const arg of expr.args) {
+      args.push(this.evaluate(arg));
+    }
+
+    if (!isLoxCallable(callee)) {
+      throw new RuntimeError(expr.paren, 'Can only call functions and classes.');
+    }
+
+    const func = callee;
+
+    if (args.length != func.arity()) {
+      throw new RuntimeError(
+        expr.paren,
+        'Expected ' + func.arity() + ' arguments but got ' + args.length + '.'
+      );
+    }
+
+    return func.call(this, args);
+  }
+
+  visitFuncStmt(stmt: Func) {
+    const func = new LoxFunction(stmt, this.environment);
+    this.environment.define(stmt.name.lexeme, func);
+    return null;
+  }
+
+  visitReturnStmt(stmt: Return) {
+    let value = null;
+
+    if (stmt.value !== null) {
+      value = this.evaluate(stmt.value);
+    }
+
+    throw new ReturnValue(value);
   }
 }
 export default Interpreter;
