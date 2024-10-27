@@ -15,6 +15,7 @@ class Lox {
     const encoder = new TextEncoder();
 
     // Display the initial prompt
+    console.log("type exit or quit to close REPL");
     await Deno.stdout.write(encoder.encode("> "));
 
     // Loop to continuously read input and execute it
