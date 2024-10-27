@@ -1,4 +1,4 @@
-import Lox from "./Lox.ts";
+import Lox from './Lox.ts';
 
 // we want to drop the user into a REPL for our interpreter if there is no file path provided.
 async function main() {
@@ -6,7 +6,7 @@ async function main() {
   const filePath = Deno.args.at(0);
 
   if (tooManyArgs) {
-    console.log("Usage: tlox [script]");
+    console.log('Usage: tlox [script]');
     Deno.exit(1);
   }
 
@@ -22,7 +22,7 @@ async function main() {
   }
 
   try {
-    const decoder = new TextDecoder("utf-8");
+    const decoder = new TextDecoder('utf-8');
     const bytes = await Deno.readFile(filePath);
     const decoded = decoder.decode(bytes);
 

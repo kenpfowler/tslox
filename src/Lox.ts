@@ -1,9 +1,9 @@
-import Scanner from "./Scanner.ts";
-import Token from "./Token.ts";
-import TokenType from "./TokenType.ts";
-import Parser from "./Parser.ts";
-import RuntimeError from "./RuntimeError.ts";
-import Interpreter from "./Interpreter.ts";
+import Scanner from './Scanner.ts';
+import Token from './Token.ts';
+import TokenType from './TokenType.ts';
+import Parser from './Parser.ts';
+import RuntimeError from './RuntimeError.ts';
+import Interpreter from './Interpreter.ts';
 
 class Lox {
   private static readonly interpreter = new Interpreter();
@@ -15,26 +15,26 @@ class Lox {
     const encoder = new TextEncoder();
 
     // Display the initial prompt
-    console.log("type exit or quit to close REPL");
-    await Deno.stdout.write(encoder.encode("> "));
+    console.log('type exit or quit to close REPL');
+    await Deno.stdout.write(encoder.encode('> '));
 
     // Loop to continuously read input and execute it
     for await (const chunk of Deno.stdin.readable) {
       const input = decoder.decode(chunk).trim();
 
-      if (input === "exit" || input === "quit") {
-        console.log("Exiting REPL...");
+      if (input === 'exit' || input === 'quit') {
+        console.log('Exiting REPL...');
         break;
       }
 
       try {
         Lox.run(input);
       } catch (err) {
-        console.error("Error:", err);
+        console.error('Error:', err);
       }
 
       // Display the prompt again after executing
-      await Deno.stdout.write(encoder.encode("> "));
+      await Deno.stdout.write(encoder.encode('> '));
     }
   }
 
@@ -52,7 +52,7 @@ class Lox {
 
   public static error(token: Token, message: string) {
     if (token.type === TokenType.EOF) {
-      this.report(token.line, " at end", message);
+      this.report(token.line, ' at end', message);
     } else {
       this.report(token.line, " at '" + token.lexeme + "'", message);
     }
@@ -64,12 +64,12 @@ class Lox {
   }
 
   public static runtimeError(error: RuntimeError) {
-    console.error(error.message + "\n[line " + error.token.line + "]");
+    console.error(error.message + '\n[line ' + error.token.line + ']');
     this.hadRuntimeError = true;
   }
 
   private static report(line: number, where: string, message: string) {
-    console.error("[line " + line + "] Error" + where + ": " + message);
+    console.error('[line ' + line + '] Error' + where + ': ' + message);
     this.hadError = true;
   }
 }

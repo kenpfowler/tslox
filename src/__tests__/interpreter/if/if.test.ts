@@ -17,7 +17,13 @@ describe('Interpreter Class', () => {
     });
 
     test('evaluates conditions as expected', () => {
-      matchPrintOutput(folder, 'truth.lox', ['false', 'nil', 'true', '0', 'empty']);
+      matchPrintOutput(folder, 'truth.lox', [
+        'false',
+        'nil',
+        'true',
+        '0',
+        'empty',
+      ]);
     });
 
     test('executes statement with dangling else correctly', () => {
