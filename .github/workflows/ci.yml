@@ -1,74 +1,24 @@
-name: Continuous Integration
+name: Deno CI
 
-on:
-  pull_request:
-  push:
-    branches:
-      - main
+on: [push, pull_request]
+
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Install Just
-        uses: extractions/setup-just@v1
-
-      - name: Install Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2.0.1
-        with:
-          version: 8.6.3
-
-      - name: Install dependencies
-        run: just pnpm install
-
-      - name: Run eslint
-        run: just lint
-
-  prettier:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          # Make sure the actual branch is checked out when running on pull requests
-          ref: ${{ github.head_ref }}
-
-      - name: Prettify code
-        uses: creyD/prettier_action@v4.3
-        with:
-          # This part is also where you can pass other options, for example:
-          prettier_version: 2.8.3
-          dry: True
-          prettier_options: --check **/*.{js,ts,md,json,yml}
-
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Install Just
-        uses: extractions/setup-just@v1
-
-      - name: Install Node.js
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: denoland/setup-deno@v1
         with:
-          node-version: 18
+          deno-version: v1.x
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2.0.1
-        with:
-          version: 8.6.3
+      - name: Format Check
+        run: deno fmt --check
 
-      - name: Install dependencies
-        run: just pnpm install
+      - name: Lint
+        run: deno lint
 
-      - name: Run tests
-        run: just test
+      - name: Type Check
+        run: deno check **/*.ts
+
+      - name: Test
+        run: deno test --allow-read
