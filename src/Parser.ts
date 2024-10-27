@@ -94,6 +94,7 @@ class Parser {
         this.synchronize();
         // FIXME: this is a bandaid. Apperently typed java objects can be initialized as null and still be passed around as the type they are labeled as.
         // This doesn't work in typescript.  Our code in parse on line 24 expects the declaration method to return a statement.
+
         return null as any;
       }
     }

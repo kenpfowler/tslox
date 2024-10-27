@@ -16,6 +16,11 @@
     "@std/path": "jsr:@std/path@^1.0.7",
     "@std/testing": "jsr:@std/testing@^1.0.3"
   },
+  "lint": {
+    "rules": {
+      "exclude": ["no-explicit-any"]
+    }
+  },
   "fmt": {
     "useTabs": false,
     "singleQuote": true

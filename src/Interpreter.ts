@@ -48,7 +48,7 @@ class Interpreter implements ExprVisitor<LoxLiteral>, StmtVisitor<void> {
         arity: () => {
           return 0;
         },
-        call: (interpreter: Interpreter, args: LoxLiteral[]) => {
+        call: (_interpreter: Interpreter, _args: LoxLiteral[]) => {
           return Date.now() / 1000;
         },
 

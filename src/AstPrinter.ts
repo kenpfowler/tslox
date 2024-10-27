@@ -10,6 +10,7 @@ import {
   Unary,
   Variable,
 } from './Expr.ts';
+import type LoxCallable from './LoxCallable.ts';
 
 import {
   Block,
@@ -35,7 +36,7 @@ export class AstPrinter implements ExprVisitor<string>, StmtVisitor<string> {
   visitFuncStmt(_stmt: Func) {
     return '';
   }
-  visitFunctionStmt(_stmt: Function) {
+  visitFunctionStmt(_stmt: LoxCallable) {
     return '';
   }
   visitWhileStmt(_stmt: While) {
