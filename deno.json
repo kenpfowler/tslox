@@ -8,7 +8,8 @@
       "src/__tests__/AstPrinter.test.ts",
       "src/__tests__/Scanner.test.ts",
       "src/__tests__/interpreter/boolean/not.test.ts",
-      "src/__tests__/interpreter/boolean/equality.test.ts"
+      "src/__tests__/interpreter/boolean/equality.test.ts",
+      "src/__tests__/interpreter/nil/literal.test.ts"
     ]
   },
   "imports": {
