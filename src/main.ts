@@ -1,38 +1,39 @@
-import path from 'path';
-import fs from 'fs';
-import Lox from './Lox';
+import Lox from "./Lox.ts";
 
 // we want to drop the user into a REPL for our interpreter if there is no file path provided.
-function main() {
-  const tooManyArgs = process.argv.length > 3;
-  const filePath = process.argv[2];
+async function main() {
+  const tooManyArgs = Deno.args.length > 1;
+  const filePath = Deno.args.at(0);
 
   if (tooManyArgs) {
-    console.log('Usage: tlox [script]');
-    process.exit(1);
+    console.log("Usage: tlox [script]");
+    Deno.exit(1);
   }
 
+  // drop the user into REPL if there is no file path provided
   if (!filePath) {
     try {
-      Lox.runPrompt();
-      process.exit(0);
+      await Lox.runPrompt();
+      Deno.exit(0);
     } catch (e) {
-      process.exit(0);
+      console.error(e);
+      Deno.exit(0);
     }
   }
 
-  const fullPath = path.resolve(process.cwd(), filePath);
+  try {
+    const decoder = new TextDecoder("utf-8");
+    const bytes = await Deno.readFile(filePath);
+    const decoded = decoder.decode(bytes);
 
-  fs.readFile(fullPath, 'utf8', (err, data) => {
-    if (err) {
-      console.error(`Error: Unable to read file at path ${fullPath}`);
-      process.exit(1);
-    }
-
-    console.log(`Running tslox interpreter on file -> ${fullPath}:`);
-    Lox.run(data);
-    process.exit(0);
-  });
+    console.log(`Running tslox interpreter on file -> ${filePath}:`);
+    Lox.run(decoded);
+    Deno.exit(0);
+  } catch (err) {
+    console.error(err);
+    console.error(`Error: Unable to read file at path ${filePath}`);
+    Deno.exit(1);
+  }
 }
 
 main();

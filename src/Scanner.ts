@@ -1,6 +1,6 @@
-import Lox from './Lox';
-import Token, { LoxLiteral } from './Token';
-import TokenType from './TokenType';
+import Lox from './Lox.ts';
+import Token, { LoxLiteral } from './Token.ts';
+import TokenType from './TokenType.ts';
 
 /**
  * Attempts to process a source file into tokens
@@ -39,7 +39,12 @@ class Scanner {
     return this.current >= this.source.length;
   }
 
-  private addToken(type: TokenType, lexeme: string, line: number, literal?: LoxLiteral) {
+  private addToken(
+    type: TokenType,
+    lexeme: string,
+    line: number,
+    literal?: LoxLiteral,
+  ) {
     const token = new Token({ type, lexeme, line, literal: literal ?? null });
     this.tokens.push(token);
   }
@@ -52,7 +57,12 @@ class Scanner {
     }
 
     this.tokens.push(
-      new Token({ type: TokenType.EOF, line: this.line, lexeme: 'EOF', literal: null })
+      new Token({
+        type: TokenType.EOF,
+        line: this.line,
+        lexeme: 'EOF',
+        literal: null,
+      }),
     );
     return this.tokens;
   }
@@ -109,7 +119,12 @@ class Scanner {
       while (this.isDigit(this.peek())) this.advance();
     }
 
-    this.addToken(TokenType.NUMBER, this.getLexeme(), this.line, Number(this.getLexeme()));
+    this.addToken(
+      TokenType.NUMBER,
+      this.getLexeme(),
+      this.line,
+      Number(this.getLexeme()),
+    );
   }
 
   private identifier() {
@@ -127,7 +142,11 @@ class Scanner {
   }
 
   private isAlpha(char: string) {
-    return (char >= 'a' && char <= 'z') || (char >= 'A' && char <= 'Z') || char == '_';
+    return (
+      (char >= 'a' && char <= 'z') ||
+      (char >= 'A' && char <= 'Z') ||
+      char == '_'
+    );
   }
 
   private isAlphaNumeric(char: string) {
@@ -207,28 +226,28 @@ class Scanner {
         this.addToken(
           this.match('=') ? TokenType.BANG_EQUAL : TokenType.BANG,
           this.getLexeme(),
-          this.line
+          this.line,
         );
         break;
       case TokenType.EQUAL:
         this.addToken(
           this.match('=') ? TokenType.EQUAL_EQUAL : TokenType.EQUAL,
           this.getLexeme(),
-          this.line
+          this.line,
         );
         break;
       case TokenType.GREATER:
         this.addToken(
           this.match('=') ? TokenType.GREATER_EQUAL : TokenType.GREATER,
           this.getLexeme(),
-          this.line
+          this.line,
         );
         break;
       case TokenType.LESS:
         this.addToken(
           this.match('=') ? TokenType.LESS_EQUAL : TokenType.LESS,
           this.getLexeme(),
-          this.line
+          this.line,
         );
         break;
       case TokenType.SLASH:

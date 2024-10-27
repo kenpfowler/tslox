@@ -1,27 +1,40 @@
-import Scanner from './Scanner';
-import Token from './Token';
-import TokenType from './TokenType';
-import Parser from './Parser';
-import RuntimeError from './RuntimeError';
-import Interpreter from './Interpreter';
-import readline from 'readline';
+import Scanner from "./Scanner.ts";
+import Token from "./Token.ts";
+import TokenType from "./TokenType.ts";
+import Parser from "./Parser.ts";
+import RuntimeError from "./RuntimeError.ts";
+import Interpreter from "./Interpreter.ts";
 
 class Lox {
   private static readonly interpreter = new Interpreter();
   private static hadError = false;
   private static hadRuntimeError = false;
 
-  public static runPrompt() {
-    const rl = readline.createInterface({
-      input: process.stdin,
-      output: process.stdout,
-    });
-    rl.setPrompt('>');
-    rl.prompt();
-    rl.on('line', (input) => {
-      Lox.run(input);
-      rl.prompt();
-    });
+  public static async runPrompt() {
+    const decoder = new TextDecoder();
+    const encoder = new TextEncoder();
+
+    // Display the initial prompt
+    await Deno.stdout.write(encoder.encode("> "));
+
+    // Loop to continuously read input and execute it
+    for await (const chunk of Deno.stdin.readable) {
+      const input = decoder.decode(chunk).trim();
+
+      if (input === "exit" || input === "quit") {
+        console.log("Exiting REPL...");
+        break;
+      }
+
+      try {
+        Lox.run(input);
+      } catch (err) {
+        console.error("Error:", err);
+      }
+
+      // Display the prompt again after executing
+      await Deno.stdout.write(encoder.encode("> "));
+    }
   }
 
   static run(source: string) {
@@ -29,15 +42,16 @@ class Lox {
     const tokens = scanner.scanForTokens();
     const parser = new Parser(tokens);
     const statements = parser.parse();
-    if (this.hadError) process.exit(65);
-    if (this.hadRuntimeError) process.exit(70);
+
+    if (this.hadError) Deno.exit(65);
+    if (this.hadRuntimeError) Deno.exit(70);
 
     this.interpreter.interpret(statements);
   }
 
   public static error(token: Token, message: string) {
     if (token.type === TokenType.EOF) {
-      this.report(token.line, ' at end', message);
+      this.report(token.line, " at end", message);
     } else {
       this.report(token.line, " at '" + token.lexeme + "'", message);
     }
@@ -48,13 +62,13 @@ class Lox {
     throw Error(msg);
   }
 
-  static runtimeError(error: RuntimeError) {
-    console.error(error.message + '\n[line ' + error.token.line + ']');
+  public static runtimeError(error: RuntimeError) {
+    console.error(error.message + "\n[line " + error.token.line + "]");
     this.hadRuntimeError = true;
   }
 
   private static report(line: number, where: string, message: string) {
-    console.error('[line ' + line + '] Error' + where + ': ' + message);
+    console.error("[line " + line + "] Error" + where + ": " + message);
     this.hadError = true;
   }
 }

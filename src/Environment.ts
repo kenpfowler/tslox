@@ -1,5 +1,5 @@
-import RuntimeError from './RuntimeError';
-import Token, { LoxLiteral } from './Token';
+import RuntimeError from './RuntimeError.ts';
+import Token, { LoxLiteral } from './Token.ts';
 
 /**
  * Map of scoped variables that declared in the program.
@@ -13,7 +13,6 @@ class Environment {
   }
 
   /**
-   *
    * @param name token containing the variable name
    * @returns returns the value mapped to the variable name else returns a runtime error if the variable does not exist
    */
@@ -32,7 +31,6 @@ class Environment {
   }
 
   /**
-   *
    * @param name token containing the variable name
    * @param value value being assigned
    * @returns if assignment is successful returns void, else returns a runtime error if the variable does not exist
@@ -58,7 +56,6 @@ class Environment {
   }
 
   /**
-   *
    * @param name token containing the name of the variable being defined
    * @param value value being assigned to the variable name
    */

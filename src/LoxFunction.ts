@@ -1,9 +1,9 @@
-import Environment from './Environment';
-import Interpreter from './Interpreter';
-import LoxCallable from './LoxCallable';
-import ReturnValue from './Return';
-import { Func } from './Stmt';
-import { LoxLiteral } from './Token';
+import Environment from './Environment.ts';
+import Interpreter from './Interpreter.ts';
+import LoxCallable from './LoxCallable.ts';
+import ReturnValue from './Return.ts';
+import { Func } from './Stmt.ts';
+import { LoxLiteral } from './Token.ts';
 
 export default class LoxFunction implements LoxCallable {
   private readonly closure;

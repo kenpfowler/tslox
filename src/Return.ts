@@ -1,4 +1,4 @@
-import { LoxLiteral } from './Token';
+import { LoxLiteral } from './Token.ts';
 
 export default class ReturnValue extends Error {
   public readonly value: LoxLiteral;

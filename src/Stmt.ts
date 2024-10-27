@@ -1,5 +1,5 @@
-import { Expr } from './Expr';
-import Token from './Token';
+import { Expr } from './Expr.ts';
+import Token from './Token.ts';
 
 export abstract class Stmt {
   abstract accept<R>(visitor: StmtVisitor<R>): R;

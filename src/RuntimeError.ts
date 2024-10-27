@@ -1,4 +1,4 @@
-import Token from './Token';
+import Token from './Token.ts';
 
 /**
  * Defines a runtime error in the program.

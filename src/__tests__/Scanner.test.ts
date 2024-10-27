@@ -1,28 +1,14 @@
-import Scanner from '../Scanner';
-import Token from '../Token';
-import TokenType from '../TokenType';
+import { describe, it } from '@std/testing/bdd';
+import { assertEquals } from '@std/assert';
 
-function areTokenTypesAccurate(tokens: Token[], expected: TokenType[]) {
-  let current = 0;
-  test.each<Token>(tokens)('Token should be identified as: $type', ({ type }) => {
-    expect(type).toBe(expected[current]);
-    current++;
-  });
-}
-
-function isTokenCountAccurate(tokens: Token[], expected: TokenType[]) {
-  const total = expected.length;
-  it(`It should return ${total} tokens`, () => {
-    expect(tokens.length).toBe(total);
-  });
-}
+import Scanner from '../Scanner.ts';
+import TokenType from '../TokenType.ts';
 
 function emitTokens(source: string) {
   const scanner = new Scanner(source);
   return scanner.scanForTokens();
 }
 
-// TODO: source file for tests should be an actual .lox file
 describe('Test Scanner Implementation: Punctuators', () => {
   const source = '(){};,+-*!===<=>=!=<>/.';
   const tokens = emitTokens(source);
@@ -48,12 +34,20 @@ describe('Test Scanner Implementation: Punctuators', () => {
     TokenType.EOF,
   ];
 
-  isTokenCountAccurate(tokens, expected);
-  areTokenTypesAccurate(tokens, expected);
+  it('should return expected number of tokens', () => {
+    assertEquals(tokens.length, expected.length);
+  });
+  it('should return the correct tokens in sequence', () => {
+    assertEquals(
+      tokens.map((token) => token.type),
+      expected,
+    );
+  });
 });
 
 describe('Test Scanner Implementation: Keywords', () => {
-  const source = 'and class else false for fun if nil or return super this true var while';
+  const source =
+    'and class else false for fun if nil or return super this true var while';
   const tokens = emitTokens(source);
 
   const expected = [
@@ -75,8 +69,15 @@ describe('Test Scanner Implementation: Keywords', () => {
     TokenType.EOF,
   ];
 
-  isTokenCountAccurate(tokens, expected);
-  areTokenTypesAccurate(tokens, expected);
+  it('should return expected number of tokens', () => {
+    assertEquals(tokens.length, expected.length);
+  });
+  it('should return the correct tokens in sequence', () => {
+    assertEquals(
+      tokens.map((token) => token.type),
+      expected,
+    );
+  });
 });
 
 describe('Test Scanner Implementation: Identifiers', () => {
@@ -96,8 +97,15 @@ describe('Test Scanner Implementation: Identifiers', () => {
     TokenType.EOF,
   ];
 
-  isTokenCountAccurate(tokens, expected);
-  areTokenTypesAccurate(tokens, expected);
+  it('should return expected number of tokens', () => {
+    assertEquals(tokens.length, expected.length);
+  });
+  it('should return the correct tokens in sequence', () => {
+    assertEquals(
+      tokens.map((token) => token.type),
+      expected,
+    );
+  });
 });
 
 describe('Test Scanner Implementation: Strings', () => {
@@ -105,8 +113,15 @@ describe('Test Scanner Implementation: Strings', () => {
   const tokens = emitTokens(source);
   const expected = [TokenType.STRING, TokenType.STRING, TokenType.EOF];
 
-  isTokenCountAccurate(tokens, expected);
-  areTokenTypesAccurate(tokens, expected);
+  it('should return expected number of tokens', () => {
+    assertEquals(tokens.length, expected.length);
+  });
+  it('should return the correct tokens in sequence', () => {
+    assertEquals(
+      tokens.map((token) => token.type),
+      expected,
+    );
+  });
 });
 
 describe('Test Scanner Implementation: Comments', () => {
@@ -114,8 +129,15 @@ describe('Test Scanner Implementation: Comments', () => {
   const tokens = emitTokens(source);
   const expected = [TokenType.IDENTIFIER, TokenType.EOF];
 
-  isTokenCountAccurate(tokens, expected);
-  areTokenTypesAccurate(tokens, expected);
+  it('should return expected number of tokens', () => {
+    assertEquals(tokens.length, expected.length);
+  });
+  it('should return the correct tokens in sequence', () => {
+    assertEquals(
+      tokens.map((token) => token.type),
+      expected,
+    );
+  });
 });
 
 describe('Test Scanner Implementation: Numbers', () => {
@@ -131,6 +153,13 @@ describe('Test Scanner Implementation: Numbers', () => {
     TokenType.EOF,
   ];
 
-  isTokenCountAccurate(tokens, expected);
-  areTokenTypesAccurate(tokens, expected);
+  it('should return expected number of tokens', () => {
+    assertEquals(tokens.length, expected.length);
+  });
+  it('should return the correct tokens in sequence', () => {
+    assertEquals(
+      tokens.map((token) => token.type),
+      expected,
+    );
+  });
 });

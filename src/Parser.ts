@@ -1,9 +1,29 @@
-import { Assign, Binary, Call, Expr, Grouping, Literal, Logical, Unary, Variable } from './Expr';
-import Lox from './Lox';
-import ParseError from './ParseError';
-import { Block, ExpressionStatement, Func, If, Print, Stmt, Var, While, Return } from './Stmt';
-import Token from './Token';
-import TokenType from './TokenType';
+import {
+  Assign,
+  Binary,
+  Call,
+  Expr,
+  Grouping,
+  Literal,
+  Logical,
+  Unary,
+  Variable,
+} from './Expr.ts';
+import Lox from './Lox.ts';
+import ParseError from './ParseError.ts';
+import {
+  Block,
+  ExpressionStatement,
+  Func,
+  If,
+  Print,
+  Return,
+  Stmt,
+  Var,
+  While,
+} from './Stmt.ts';
+import Token from './Token.ts';
+import TokenType from './TokenType.ts';
 
 /**
  * program        → declaration* EOF
@@ -21,8 +41,6 @@ import TokenType from './TokenType';
  * returnStmt     → "return" expression? ";"
  * whileStmt      → "while" "(" expression ")" statement
  * block          → "{" declaration* "}" ;
- *
- *
  *
  * expression     → assignment
  * assignment     → ( call "." )? IDENTIFIER "=" assignment | logicOr
@@ -92,7 +110,9 @@ class Parser {
           throw this.error(this.peek(), "Can't have more than 255 parameters.");
         }
 
-        parameters.push(this.consume(TokenType.IDENTIFIER, 'Expect parameter name.'));
+        parameters.push(
+          this.consume(TokenType.IDENTIFIER, 'Expect parameter name.'),
+        );
       } while (this.match(TokenType.COMMA));
     }
     this.consume(TokenType.RIGHT_PAREN, "Expect ')' after parameters.");
@@ -295,7 +315,6 @@ class Parser {
   }
 
   /**
-   *
    * @returns the previous token
    */
   private previous() {
@@ -306,7 +325,12 @@ class Parser {
     let expr = this.term();
 
     while (
-      this.match(TokenType.GREATER, TokenType.GREATER_EQUAL, TokenType.LESS, TokenType.LESS_EQUAL)
+      this.match(
+        TokenType.GREATER,
+        TokenType.GREATER_EQUAL,
+        TokenType.LESS,
+        TokenType.LESS_EQUAL,
+      )
     ) {
       const operator = this.previous();
       const right = this.term();
@@ -377,7 +401,10 @@ class Parser {
       } while (this.match(TokenType.COMMA));
     }
 
-    const paren = this.consume(TokenType.RIGHT_PAREN, "Expect ')' after arguments");
+    const paren = this.consume(
+      TokenType.RIGHT_PAREN,
+      "Expect ')' after arguments",
+    );
 
     return new Call(callee, paren, args);
   }
@@ -424,7 +451,6 @@ class Parser {
   }
 
   /**
-   *
    * @param type a token type
    * @returns return a true if the current token matches the type
    */
@@ -434,7 +460,6 @@ class Parser {
   }
 
   /**
-   *
    * @returns the current token being parsed
    */
   private peek() {
@@ -442,7 +467,6 @@ class Parser {
   }
 
   /**
-   *
    * @returns a boolean indicating if we have reached the last token
    */
   private isAtEnd() {

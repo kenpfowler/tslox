@@ -1,16 +1,16 @@
-import exp from 'constants';
 import {
+  Assign,
   Binary,
+  Call,
   Expr,
+  ExprVisitor,
   Grouping,
   Literal,
-  Unary,
-  ExprVisitor,
-  Variable,
-  Assign,
   Logical,
-  Call,
-} from './Expr';
+  Unary,
+  Variable,
+} from './Expr.ts';
+
 import {
   Block,
   ExpressionStatement,
@@ -21,7 +21,7 @@ import {
   StmtVisitor,
   Var,
   While,
-} from './Stmt';
+} from './Stmt.ts';
 
 export class AstPrinter implements ExprVisitor<string>, StmtVisitor<string> {
   expr: Expr;
@@ -29,32 +29,32 @@ export class AstPrinter implements ExprVisitor<string>, StmtVisitor<string> {
   constructor(expr: Expr) {
     this.expr = expr;
   }
-  visitReturnStmt(stmt: Return) {
+  visitReturnStmt(_stmt: Return) {
     return '';
   }
-  visitFuncStmt(stmt: Func) {
+  visitFuncStmt(_stmt: Func) {
     return '';
   }
-  visitFunctionStmt(stmt: Function) {
+  visitFunctionStmt(_stmt: Function) {
     return '';
   }
-  visitWhileStmt(stmt: While) {
+  visitWhileStmt(_stmt: While) {
     return '';
   }
-  visitIfStmt(stmt: If) {
+  visitIfStmt(_stmt: If) {
     return '';
   }
-  visitBlockStmt(stmt: Block) {
+  visitBlockStmt(_stmt: Block) {
     return '';
   }
-  visitExpressionStatementStmt(stmt: ExpressionStatement) {
+  visitExpressionStatementStmt(_stmt: ExpressionStatement) {
     return '';
   }
-  visitPrintStmt(stmt: Print) {
+  visitPrintStmt(_stmt: Print) {
     return '';
   }
 
-  visitVarStmt(stmt: Var) {
+  visitVarStmt(_stmt: Var) {
     return '';
   }
 

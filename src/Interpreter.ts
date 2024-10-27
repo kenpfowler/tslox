@@ -1,18 +1,18 @@
-import Environment from './Environment';
+import Environment from './Environment.ts';
 import {
-  ExprVisitor,
+  Assign,
   Binary,
+  Call,
   Expr,
-  Unary,
+  ExprVisitor,
   Grouping,
   Literal,
-  Variable,
-  Assign,
   Logical,
-  Call,
-} from './Expr';
-import Lox from './Lox';
-import RuntimeError from './RuntimeError';
+  Unary,
+  Variable,
+} from './Expr.ts';
+import Lox from './Lox.ts';
+import RuntimeError from './RuntimeError.ts';
 import {
   Block,
   ExpressionStatement,
@@ -24,14 +24,14 @@ import {
   StmtVisitor,
   Var,
   While,
-} from './Stmt';
-import ReturnValue from './Return';
-import Token, { LoxLiteral } from './Token';
-import TokenType from './TokenType';
-import LoxFunction from './LoxFunction';
-import LoxCallable from './LoxCallable';
-const isLoxCallable = (callee: any): callee is LoxFunction => {
-  return 'declaration' in callee && 'closure' in callee;
+} from './Stmt.ts';
+import ReturnValue from './Return.ts';
+import Token, { LoxLiteral } from './Token.ts';
+import TokenType from './TokenType.ts';
+import LoxFunction from './LoxFunction.ts';
+import LoxCallable from './LoxCallable.ts';
+const isLoxCallable = (callee: unknown): callee is LoxFunction => {
+  return callee instanceof LoxFunction;
 };
 
 /**
@@ -42,18 +42,21 @@ class Interpreter implements ExprVisitor<LoxLiteral>, StmtVisitor<void> {
   private environment = this.globals;
 
   constructor() {
-    this.globals.define('clock', {
-      arity: () => {
-        return 0;
-      },
-      call: (interpreter: Interpreter, args: LoxLiteral[]) => {
-        return Date.now() / 1000;
-      },
+    this.globals.define(
+      'clock',
+      {
+        arity: () => {
+          return 0;
+        },
+        call: (interpreter: Interpreter, args: LoxLiteral[]) => {
+          return Date.now() / 1000;
+        },
 
-      toString: () => {
-        return '<native fn>';
-      },
-    } satisfies LoxCallable);
+        toString: () => {
+          return '<native fn>';
+        },
+      } satisfies LoxCallable,
+    );
   }
 
   public interpret(statements: Array<Stmt>) {
@@ -133,7 +136,10 @@ class Interpreter implements ExprVisitor<LoxLiteral>, StmtVisitor<void> {
         if (typeof left === 'string' && typeof right === 'string') {
           return String(left) + String(right);
         }
-        throw new RuntimeError(expression.operator, 'Operands must be two numbers or two strings.');
+        throw new RuntimeError(
+          expression.operator,
+          'Operands must be two numbers or two strings.',
+        );
       case TokenType.SLASH:
         this.checkNumberOperands(expression.operator, left, right);
         return Number(left) / Number(right);
@@ -155,7 +161,11 @@ class Interpreter implements ExprVisitor<LoxLiteral>, StmtVisitor<void> {
     throw new RuntimeError(operator, 'Operand must be a number.');
   }
 
-  private checkNumberOperands(operator: Token, left: LoxLiteral, right: LoxLiteral) {
+  private checkNumberOperands(
+    operator: Token,
+    left: LoxLiteral,
+    right: LoxLiteral,
+  ) {
     if (typeof left === 'number' && typeof right === 'number') return;
 
     throw new RuntimeError(operator, 'Operands must be numbers.');
@@ -286,7 +296,10 @@ class Interpreter implements ExprVisitor<LoxLiteral>, StmtVisitor<void> {
     }
 
     if (!isLoxCallable(callee)) {
-      throw new RuntimeError(expr.paren, 'Can only call functions and classes.');
+      throw new RuntimeError(
+        expr.paren,
+        'Can only call functions and classes.',
+      );
     }
 
     const func = callee;
@@ -294,7 +307,7 @@ class Interpreter implements ExprVisitor<LoxLiteral>, StmtVisitor<void> {
     if (args.length != func.arity()) {
       throw new RuntimeError(
         expr.paren,
-        'Expected ' + func.arity() + ' arguments but got ' + args.length + '.'
+        'Expected ' + func.arity() + ' arguments but got ' + args.length + '.',
       );
     }
 

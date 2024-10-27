@@ -1,4 +1,4 @@
-import Token, { LoxLiteral } from './Token';
+import Token, { LoxLiteral } from './Token.ts';
 
 export abstract class Expr {
   abstract accept<R>(visitor: ExprVisitor<R>): R;
