@@ -1,19 +1,10 @@
-# Lox interpreter & Strata UI Project Sandbox
+# Lox interpreter
 
-Setting up a repo to build an interpreter with typescript also practice some
-devops
+This project is an attempt to adapt the interpreter described in [Robert Nystrom's Crafting Interpreters](https://craftinginterpreters.com/) from Java to TypeScript.
 
-**GOAL**: Understand the concepts necessary to build an interpreter & learn how
-to setup a workflow
+## Technologies
 
-## Task
-
-Setup the Strata UI Platform with eslint, prettier, and jest in the repo. Create
-a workflow that would run all of them on pushes to main and PRs.
-
-[Ticket here!](https://strataresearch.atlassian.net/jira/software/projects/SUP/boards/16?selectedIssue=SUP-31)
-
-## Technologies we're working with
+- Deno runtime
 
 - [typescript](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html):
   strongly typed javascript
@@ -26,4 +17,4 @@ a workflow that would run all of them on pushes to main and PRs.
 - [prettier](https://prettier.io/docs/en/index.html): code formatter for
   automating consistent code style conventions
 - [jest](https://jestjs.io/docs/getting-started): testing framework for
-  javascript
+  javascript 
