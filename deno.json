@@ -9,7 +9,10 @@
       "src/__tests__/Scanner.test.ts",
       "src/__tests__/interpreter/boolean/not.test.ts",
       "src/__tests__/interpreter/boolean/equality.test.ts",
-      "src/__tests__/interpreter/nil/literal.test.ts"
+      "src/__tests__/interpreter/nil/literal.test.ts",
+      "src/__tests__/interpreter/assignment/global.test.ts",
+      "src/__tests__/interpreter/assignment/syntax.test.ts",
+      "src/__tests__/interpreter/assignment/associativity.test.ts"
     ]
   },
   "imports": {
