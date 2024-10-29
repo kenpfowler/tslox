@@ -1,20 +1,20 @@
-import { assertSpyCall, assertSpyCalls, spy } from "@std/testing/mock";
-import * as path from "jsr:@std/path";
-import Lox from "../../../Lox.ts";
+import { assertSpyCall, assertSpyCalls, spy } from '@std/testing/mock';
+import * as path from 'jsr:@std/path';
+import Lox from '../../../Lox.ts';
 
-Deno.test("variable assignment should be right associative", () => {
-  const consoleSpy = spy(console, "log");
+Deno.test('variable assignment should be right associative', () => {
+  const consoleSpy = spy(console, 'log');
 
   const data = Deno.readTextFileSync(
     path.join(
       Deno.cwd(),
-      "/src/__tests__/interpreter/assignment/associativity.lox"
-    )
+      '/src/__tests__/interpreter/assignment/associativity.lox',
+    ),
   );
 
   Lox.run(data);
 
-  const results = ["c", "c", "c"];
+  const results = ['c', 'c', 'c'];
 
   assertSpyCalls(consoleSpy, results.length);
 

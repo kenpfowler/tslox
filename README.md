@@ -1,6 +1,8 @@
 # Lox interpreter
 
-This project is an attempt to adapt the interpreter described in [Robert Nystrom's Crafting Interpreters](https://craftinginterpreters.com/) from Java to TypeScript.
+This project is an attempt to adapt the interpreter described in
+[Robert Nystrom's Crafting Interpreters](https://craftinginterpreters.com/) from
+Java to TypeScript.
 
 # Technologies
 
